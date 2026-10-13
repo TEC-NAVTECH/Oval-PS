@@ -1,10 +1,9 @@
 {
-  "id": "0849ddd2-4d34-4ed8-81e2-3c2858ef7e95",
-  "name": "Time Sheet Modification",
-  "publisher": "Tectura_VJ22",
-  "description": "Created Monthly time sheet page and manager time sheet page",
-  "version": "1.0.0.59",
-  "runtime": "13.0",
+  "id": "bda809c9-d7f1-4195-a906-846db87e6efc",
+  "name": "Oval-PS",
+  "publisher": "Default publisher",
+  "version": "1.0.0.19",
+  "runtime": "14.0",
   "target": "Cloud",
   "application": "29.0.0.0",
   "platform": "29.0.0.0",
@@ -14,16 +13,21 @@
     "includeSourceInSymbolFile": false,
     "applyToDevExtension": false
   },
-  "features": [
-    "NoImplicitWith"
+  "dependencies": [
+    {
+      "id": "0849ddd2-4d34-4ed8-81e2-3c2858ef7e95",
+      "name": "Time Sheet Modification",
+      "version": "1.0.0.58",
+      "publisher": "Tectura_VJ22"
+    }
   ],
   "idRanges": [
     {
       "from": 50100,
-      "to": 50160
+      "to": 50149
     }
   ],
   "build": {
-    "by": "AL Language Extension,15.2.1630495"
+    "by": "AL Language Extension,15.0.1433841"
   }
 }
