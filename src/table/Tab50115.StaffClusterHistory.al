@@ -27,21 +27,20 @@ table 50115 "Staff Cluster History"
             begin
                 if Staff = '' then begin
                     "Staff_Name" := '';
-                    "Resource_Group_No" := '';
+                    //  "Resource_Group_No" := '';
                     //Status := Status::" ";
                     exit;
                 end;
-
                 if Resource.Get(Staff) then begin
                     "Staff_Name" := Resource.Name;
-                    "Resource_Group_No" := Resource."Resource Group No.";
+                    //  "Resource_Group_No" := Resource."Resource Group No.";
                     Status := Resource.Status;//VJ27102026 Added
                 end;
             end;
         }
         field(3; Staff_Name; Text[250])
         {
-            Caption = 'Staff Name';
+            Caption = 'Staff Name (Full)';
             DataClassification = CustomerContent;
         }
         field(4; Staff_Cluster; Code[20])
@@ -69,12 +68,12 @@ table 50115 "Staff Cluster History"
             end;
         }
 
-        field(7; Resource_Group_No; Code[20])
-        {
-            Caption = 'Resource Group No.';
-            DataClassification = CustomerContent;
-            TableRelation = "Resource Group"."No.";
-        }
+        // field(7; Resource_Group_No; Code[20])
+        // {
+        //     Caption = 'Resource Group No.';
+        //     DataClassification = CustomerContent;
+        //     TableRelation = "Resource Group"."No.";
+        // }
 
         field(8; Status; Option)
         {
@@ -83,11 +82,11 @@ table 50115 "Staff Cluster History"
             OptionCaption = 'Active,Inactive,Planning,Resigned,Rotated';
             OptionMembers = "Active","Inactive","Planning","Resigned","Rotated";
         }
-        field(9; Cluster_Description; Text[500])
-        {
-            Caption = 'Cluster Description';
-            DataClassification = CustomerContent;
-        }
+        // field(9; Cluster_Description; Text[500])
+        // {
+        //     Caption = 'Cluster Description';
+        //     DataClassification = CustomerContent;
+        // }
     }
 
     keys

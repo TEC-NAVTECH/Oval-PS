@@ -54,10 +54,11 @@ pageextension 50101 JobCardExtension extends "Job Card"
         {
             Editable = false;
         }
-        modify("Person Responsible")
-        {
-            Caption = 'PIC';
-        }
+        //VJ05112026 commented  these field as per cara Oval issues
+        // modify("Person Responsible")
+        // {
+        //     Caption = 'PIC';
+        // }
         modify("Bill-to Contact No.")
         {
             Visible = false;
@@ -175,8 +176,6 @@ pageextension 50101 JobCardExtension extends "Job Card"
                         PICManagment.GeneratePICBalance(Rec);
                         Message('PIC Balance Generated');
                     end
-
-
                 end;
 
             }

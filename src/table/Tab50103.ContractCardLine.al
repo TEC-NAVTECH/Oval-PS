@@ -87,26 +87,27 @@ table 50103 "Contract Card Line"
             DataClassification = ToBeClassified;
             Caption = 'Line No.';
         }
-        field(12; "ProjBillMth"; Date)
-        {
-            DataClassification = ToBeClassified;
-            Caption = 'ProjBillMth';
-        }
-        field(13; "FinEstBillMth"; Date)
-        {
-            DataClassification = ToBeClassified;
-            Caption = 'FinEstBillMth';
-        }
-        field(14; "ActualBillMth"; Date)
-        {
-            DataClassification = ToBeClassified;
-            Caption = 'ActualBillMth';
-        }
-        field(15; "ProjRecMth"; Date)
-        {
-            DataClassification = ToBeClassified;
-            Caption = 'ProjRecMth';
-        }
+        //VJ05112026 Deleted these field as per cara Oval issues
+        // field(12; "ProjBillMth"; Date)
+        // {
+        //     DataClassification = ToBeClassified;
+        //     Caption = 'ProjBillMth';
+        // }
+        // field(13; "FinEstBillMth"; Date)
+        // {
+        //     DataClassification = ToBeClassified;
+        //     Caption = 'FinEstBillMth';
+        // }
+        // field(14; "ActualBillMth"; Date)
+        // {
+        //     DataClassification = ToBeClassified;
+        //     Caption = 'ActualBillMth';
+        // }
+        // field(15; "ProjRecMth"; Date)
+        // {
+        //     DataClassification = ToBeClassified;
+        //     Caption = 'ProjRecMth';
+        // }
     }
     keys
     {

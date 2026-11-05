@@ -36,19 +36,19 @@ page 50140 "Staff Cluster History List"
                 {
                     ToolTip = 'Specifies the value of the End Date field.', Comment = '%';
                 }
-                field(Resource_Group_No; Rec.Resource_Group_No)
-                {
-                    ToolTip = 'Specifies the value of the Resource Group No. field.', Comment = '%';
-                }
+                // field(Resource_Group_No; Rec.Resource_Group_No)
+                // {
+                //     ToolTip = 'Specifies the value of the Resource Group No. field.', Comment = '%';
+                // }
                 field(Status; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
                 }
-                field(Cluster_Description; Rec.Cluster_Description)
-                {
-                    ToolTip = 'Specifies the value of the Cluster Description field.', Comment = '%';
-                    Visible = false;
-                }
+                // field(Cluster_Description; Rec.Cluster_Description)
+                // {
+                //     ToolTip = 'Specifies the value of the Cluster Description field.', Comment = '%';
+                //     Visible = false;
+                // }
             }
         }
     }

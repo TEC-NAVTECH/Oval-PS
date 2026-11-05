@@ -7,6 +7,7 @@ tableextension 50104 ResourceExtension extends Resource
             DataClassification = ToBeClassified;
             Caption = 'Overseas Staff';
         }
+
         field(50105; "Staff Name"; Text[100])//VJ15072026 Added
         {
             Caption = 'Staff Name';

@@ -2,7 +2,6 @@ codeunit 50103 "PIC Project Managment"
 {
     trigger OnRun()
     begin
-
     end;
 
     procedure GenerateProjectTask(JobRec: Record Job)
@@ -66,7 +65,6 @@ codeunit 50103 "PIC Project Managment"
             repeat
 
                 ProcessPlanningLine(JobPlanningLine);
-
             until JobPlanningLine.Next() = 0;
 
         ProjectLedEnt.Reset();
@@ -90,13 +88,10 @@ codeunit 50103 "PIC Project Managment"
         PIC.Reset();
         PIC.SetCurrentKey("Project Code");
         PIC.SetRange("Project Code", ProjectLedgerEntry."Job No.");
-
         if PIC.FindSet() then
             repeat
-
                 if PIC.Count > 1 then
                     InsertPICBalanceFromLedger(ProjectLedgerEntry, PIC);
-
             until PIC.Next() = 0;
         InsertPICBalanceSumFromLedger(ProjectLedgerEntry, PIC);
     end;
@@ -121,10 +116,8 @@ codeunit 50103 "PIC Project Managment"
         PIC.SetFilter(PIC."Effective Date", '<=%1', EndDate);//VJ 03Nov2026 to take only PIC by filterting date
         if PIC.FindSet() then
             repeat
-
                 if PIC.Count > 1 then
                     InsertPICBalance(JobPlanningLine, PIC);
-
             until PIC.Next() = 0;
         InsertPICBalanceSum(JobPlanningLine, PIC, true);
         InsertPICBalanceSum(JobPlanningLine, PIC, false);// VJ 26Oct2026 added this because there is one more line needs to create with Total HR false with all fields remains same
@@ -134,12 +127,10 @@ codeunit 50103 "PIC Project Managment"
     local procedure SkipLine(JobPlanningLine: Record "Job Planning Line"): Boolean
 
     begin
-
         if (JobPlanningLine."Job Task No." = '1200') and (JobPlanningLine.ActualBillMth <> 0D) then
             exit(true);
 
         exit(false);
-
     end;
     //Insert Balance Record
     local procedure InsertPICBalance(JobPlanningLine: Record "Job Planning Line"; PICRec: Record PIC)
@@ -179,7 +170,6 @@ codeunit 50103 "PIC Project Managment"
         Balance."Total HR %" := false;
         Balance."Company Name" := CompanyInfo.Name;
         Balance.Date := GetBalanceDate(JobPlanningLine);
-
         if JobPlanningLine."Job Task No." in ['2100'] then
             Balance.Nature := Balance.Nature::ACTUAL
         else
@@ -207,7 +197,6 @@ codeunit 50103 "PIC Project Managment"
         Balance."Job Cost Factor" := JobCostFactor."Job Cost Factor";//VJ 15Oct2026
 
         PopulateAmountsFromJobLine(Balance, JobPlanningLine, PICRec, false);
-
         if Balance.Date <> 0D then begin
             if IsNewRec then
                 Balance.Insert(true)
@@ -318,7 +307,6 @@ codeunit 50103 "PIC Project Managment"
 
         if Balance.Date <> 0D then
             Balance.Insert(true);
-
     end;
 
     local procedure InsertPICBalanceSumFromLedger(JobLedgerEntry: Record "Job Ledger Entry"; PICRec: Record PIC)
@@ -344,9 +332,6 @@ codeunit 50103 "PIC Project Managment"
 
         Balance."Company Name" := CompanyInfo.Name;
         Balance.Date := JobLedgerEntry."Posting Date";
-
-
-
         IF NOT Evaluate(Balance."Job Task No.", JobLedgerEntry."Job Task No.") then
             Error('Job Task No. %1 is not numeric.', JobLedgerEntry."Job Task No.");
 
@@ -373,7 +358,6 @@ codeunit 50103 "PIC Project Managment"
         //Balance."Job Cost Factor" := PICRec."Profit Sharing Ratio";
         if Balance.Date <> 0D then
             Balance.Insert(true);
-
     end;
 
     local procedure InsertPICBalanceSum(JobPlanningLine: Record "Job Planning Line"; PICRec: Record PIC; pTotalHRPercent: Boolean)
@@ -415,7 +399,6 @@ codeunit 50103 "PIC Project Managment"
         Balance."Total HR %" := pTotalHRPercent;// VJ 26Oct2026 added this because there is one more line needs to create with Total HR false with all fields remains same
         Balance."Company Name" := CompanyInfo.Name;
         Balance.Date := GetBalanceDate(JobPlanningLine);
-
         if JobPlanningLine."Job Task No." in ['2100'] then
             Balance.Nature := Balance.Nature::ACTUAL
         else
@@ -444,7 +427,6 @@ codeunit 50103 "PIC Project Managment"
         // Balance."Profit Sharing Ratio" := PICRec."Profit Sharing Ratio";
 
         PopulateAmountsFromJobLine(Balance, JobPlanningLine, PICRec, true);
-
         if Balance.Date <> 0D then begin
             if IsNewRec then
                 Balance.Insert(true)
@@ -515,7 +497,6 @@ codeunit 50103 "PIC Project Managment"
         JobPlanningLine: Record "Job Planning Line"): Date
 
     begin
-
         case JobPlanningLine."Job Task No." of
 
             '1200':
@@ -528,26 +509,21 @@ codeunit 50103 "PIC Project Managment"
 
             else
                 exit(JobPlanningLine."Planned Delivery Date");
-
         end;
-
     end;
     //Nature Logic
     local procedure GetNature(JobPlanningLine: Record "Job Planning Line") Result: Option ACTUAL,PROJECTED
 
     begin
-
         if JobPlanningLine."Line Type" = JobPlanningLine."Line Type"::Budget then
             exit(Result::PROJECTED);
 
         exit(Result::ACTUAL);
-
     end;
     //Category Logic
     local procedure GetCategory(JobPlanningLine: Record "Job Planning Line") Result: Option Billing,Resource
 
     begin
-
         case JobPlanningLine."Job Task No." of
 
             '2100',
@@ -559,11 +535,9 @@ codeunit 50103 "PIC Project Managment"
             '2600':
 
                 exit(Result::Resource);
-
         end;
 
         exit(Result::Billing);
-
     end;
     //Amount Calculation
     local procedure PopulateAmountsFromJobLine(var Balance: Record "PIC Project Balance"; JobPlanningLine: Record "Job Planning Line"; PICRec: Record PIC; lSum: Boolean)
@@ -578,7 +552,6 @@ codeunit 50103 "PIC Project Managment"
         if lSum then
             Ratio := 1;
         if JobPlanningLine."Job Task No." in ['1100', '1200'] then begin
-
             if JobPlanningLine."Line Type" = JobPlanningLine."Line Type"::Budget then
                 Balance.Amount := JobPlanningLine."Line Amount (LCY)" * Ratio //TEC.VJ.16SEP2026
                                                                               //   Balance."Total Cost" := JobPlanningLine."Line Amount (LCY)" * Ratio Commented By //TEC.VJ.16SEP2026
@@ -594,10 +567,7 @@ codeunit 50103 "PIC Project Managment"
 
             else
                 Balance."Total Cost" := JobPlanningLine."Total Cost (LCY)" * Ratio;
-
         end;
-
-
     end;
 
     local procedure PopulateAmountsFromJobLeedger(var Balance: Record "PIC Project Balance"; JobLedgerEntry: Record "Job Ledger Entry"; PICRec: Record PIC; lSum: Boolean)
@@ -612,7 +582,6 @@ codeunit 50103 "PIC Project Managment"
         if lSum then
             Ratio := 1;
         if JobLedgerEntry."Job Task No." in ['1100', '1200'] then begin
-
             if JobLedgerEntry."Line Type" = JobLedgerEntry."Line Type"::Budget then
                 Balance.Amount := JobLedgerEntry."Line Amount (LCY)" * Ratio
             //Balance."Total Cost" := JobLedgerEntry."Line Amount (LCY)" * Ratio
@@ -622,7 +591,6 @@ codeunit 50103 "PIC Project Managment"
                   Balance.Amount := JobLedgerEntry."Line Amount (LCY)" * Ratio
         end;
         if JobLedgerEntry."Job Task No." in ['2100', '2200', '2500', '2600', '3000', '4000', '5000'] then begin
-
             if JobLedgerEntry."Line Type" = JobLedgerEntry."Line Type"::Budget then
                 //Balance.Amount := JobPlanningLine."Total Cost (LCY)" * Ratio
                 Balance."Total Cost" := JobLedgerEntry."Total Cost (LCY)" * Ratio
@@ -630,7 +598,6 @@ codeunit 50103 "PIC Project Managment"
             else
                 Balance."Total Cost" := JobLedgerEntry."Total Cost (LCY)" * Ratio;
         end;
-
     end;
 
 
@@ -645,7 +612,6 @@ codeunit 50103 "PIC Project Managment"
             exit(false);
         PICRec.FindFirst();
         exit((PICRec."Resource No." = ResourceNo) and (PICRec."Profit Sharing Ratio" = 100));
-
     end;
 
 
@@ -727,7 +693,6 @@ codeunit 50103 "PIC Project Managment"
 
                                 TotalCost := UnitCost * Quantity;
                             end;
-
                             if (TotalCost <> 0) and (JobTask."Job Task No." = '2100') then begin
                                 TotalCost := 0;//VJ05102026 Added
                                 TotalCost := UnitCost * (Quantity);//VJ05102026 Added
@@ -752,69 +717,65 @@ codeunit 50103 "PIC Project Managment"
                             end;
                         until ActualHRList.Next() = 0;
                     end;
+                end else
+                    if (JobTask."Job Task No." = '2500') or (JobTask."Job Task No." = '2600') then begin
+                        l_Month := Date2DMY(Today, 2);
+                        l_Year := Date2DMY(Today, 3);
+                        ProjectedHRList.Reset();
+                        // ProjectedHRList.SetRange("Staff No", ActualHRList."Staff No"rojectedHRList.SetRange("Project Code", JobTask."Job No.");
+                        //ProjectedHRList.Setfilter(Month, '>=%1', l_Month);
+                        ProjectedHRList.SetRange("Project Code", l_Jobrec."No.");//VJ 21Oct2026 added as per Cara
+                                                                                 //ProjectedHRList.Setfilter(Year, '>=%1', l_Year); //VJ 21Oct2026 commented the filter as per Cara as no date filter required
 
-
-
-                end else if (JobTask."Job Task No." = '2500') or (JobTask."Job Task No." = '2600') then begin
-                    l_Month := Date2DMY(Today, 2);
-                    l_Year := Date2DMY(Today, 3);
-                    ProjectedHRList.Reset();
-                    // ProjectedHRList.SetRange("Staff No", ActualHRList."Staff No"rojectedHRList.SetRange("Project Code", JobTask."Job No.");
-                    //ProjectedHRList.Setfilter(Month, '>=%1', l_Month);
-                    ProjectedHRList.SetRange("Project Code", l_Jobrec."No.");//VJ 21Oct2026 added as per Cara
-                                                                             //ProjectedHRList.Setfilter(Year, '>=%1', l_Year); //VJ 21Oct2026 commented the filter as per Cara as no date filter required
-
-                    if ProjectedHRList.Findset() then begin
-                        repeat
-                            UnitCost := 0;
-                            Quantity := 0;
-                            TotalCost := 0;
-                            JobCostFactor.Reset();
-                            JobCostFactor.SetRange("Project Code", l_Jobrec."No.");
-                            if JobCostFactor.FindLast() then;
-                            SalaryHistory.Reset();
-                            salaryHistory.setrange(Type, salaryHistory.Type::Resource);
-                            salaryHistory.SetRange(Code, ProjectedHRList."Resource No");
-                            salaryHistory.SetRange(Month, ProjectedHRList.Month);
-                            salaryHistory.SetRange(Year, ProjectedHRList.Year);
-                            if salaryHistory.findfirst() then begin
-                                UnitCost := SalaryHistory."Monthly Salary" / 200;
-                                //VJ 21oct2026 add logic as per cara chat on teams
-                                //Quantity := ProjectedHRList."Projected_HRPercent";
-                                if JobTask."Job Task No." = '2600' then
-                                    Quantity := round(((ProjectedHRList."Projected_HRPercent" / 100) * 200), 0.01)
-                                else
-                                    Quantity := round((((ProjectedHRList."Projected_HRPercent" / 100) * 200) * JobCostFactor."Job Cost Factor"), 0.01);
-                                //VJ 21oct2026 add logic as per cara chat on teams
-                            end;
-                            TotalCost := UnitCost * Quantity;
-                            if (TotalCost <> 0) and (JobTask."Job Task No." = '2500') then begin
-
-                                InsertJobPlanningLine(
-                                    l_Jobrec."No.",
-                                    JobTask."Job Task No.",
-                                    ProjectedHRList."Resource No",
-                                    UnitCost,
-                                    Quantity,
-                                    '', DMY2Date(1, ProjectedHRList.Month, ProjectedHRList.Year));
-                            end;
-                            if (TotalCost <> 0) and (JobTask."Job Task No." = '2600') then begin
+                        if ProjectedHRList.Findset() then begin
+                            repeat
+                                UnitCost := 0;
+                                Quantity := 0;
                                 TotalCost := 0;
-                                TotalCost := UnitCost * (Quantity * 200);
-                                InsertJobPlanningLine(
-                                    l_Jobrec."No.",
-                                    JobTask."Job Task No.",
-                                    ProjectedHRList."Resource No",
-                                    UnitCost,
-                                    Quantity,
-                                    '', DMY2Date(1, ProjectedHRList.Month, ProjectedHRList.Year));
-                            end;
-                        until ProjectedHRList.Next() = 0;
+                                JobCostFactor.Reset();
+                                JobCostFactor.SetRange("Project Code", l_Jobrec."No.");
+                                if JobCostFactor.FindLast() then;
+                                SalaryHistory.Reset();
+                                salaryHistory.setrange(Type, salaryHistory.Type::Resource);
+                                salaryHistory.SetRange(Code, ProjectedHRList."Resource No");
+                                salaryHistory.SetRange(Month, ProjectedHRList.Month);
+                                salaryHistory.SetRange(Year, ProjectedHRList.Year);
+                                if salaryHistory.findfirst() then begin
+                                    UnitCost := SalaryHistory."Monthly Salary" / 200;
+                                    //VJ 21oct2026 add logic as per cara chat on teams
+                                    //Quantity := ProjectedHRList."Projected_HRPercent";
+                                    if JobTask."Job Task No." = '2600' then
+                                        Quantity := round(((ProjectedHRList."Projected_HRPercent" / 100) * 200), 0.01)
+                                    else
+                                        Quantity := round((((ProjectedHRList."Projected_HRPercent" / 100) * 200) * JobCostFactor."Job Cost Factor"), 0.01);
+                                    //VJ 21oct2026 add logic as per cara chat on teams
+                                end;
+                                TotalCost := UnitCost * Quantity;
+                                if (TotalCost <> 0) and (JobTask."Job Task No." = '2500') then begin
 
+                                    InsertJobPlanningLine(
+                                        l_Jobrec."No.",
+                                        JobTask."Job Task No.",
+                                        ProjectedHRList."Resource No",
+                                        UnitCost,
+                                        Quantity,
+                                        '', DMY2Date(1, ProjectedHRList.Month, ProjectedHRList.Year));
+                                end;
+                                if (TotalCost <> 0) and (JobTask."Job Task No." = '2600') then begin
+                                    TotalCost := 0;
+                                    TotalCost := UnitCost * (Quantity * 200);
+                                    InsertJobPlanningLine(
+                                        l_Jobrec."No.",
+                                        JobTask."Job Task No.",
+                                        ProjectedHRList."Resource No",
+                                        UnitCost,
+                                        Quantity,
+                                        '', DMY2Date(1, ProjectedHRList.Month, ProjectedHRList.Year));
+                                end;
+                            until ProjectedHRList.Next() = 0;
+                        end;
                     end;
-                end;
             until JobTask.Next() = 0;
-
     end;
 
     local procedure InsertJobPlanningLine(
@@ -866,7 +827,6 @@ codeunit 50103 "PIC Project Managment"
         JobPlanningLine.Validate("No.", ResourceNo);
         if Job."Project Client No." <> '' then
             JobPlanningLine.Validate("Customer No.", Job."Project Client No.");
-
         if Planneddeliverydate <> 0D then
             JobPlanningLine.Validate("Planned Delivery Date", Planneddeliverydate);
         if UnitCost <> 0 then
@@ -929,7 +889,6 @@ codeunit 50103 "PIC Project Managment"
         Balance."Total HR %" := false;
         Balance."Company Name" := CompanyInfo.Name;
         Balance.Date := GetBalanceDate(JobPlanningLine);
-
         if JobPlanningLine."Job Task No." in ['2100'] then
             Balance.Nature := Balance.Nature::ACTUAL
         else
@@ -957,7 +916,6 @@ codeunit 50103 "PIC Project Managment"
         Balance."Profit Sharing Ratio" := PICRec."Profit Sharing Ratio";
 
         PopulateAmountsFromJobLine(Balance, JobPlanningLine, PICRec, false);
-
         if Balance.Date <> 0D then begin
             if IsNewRec then
                 Balance.Insert(true)
@@ -998,7 +956,6 @@ codeunit 50103 "PIC Project Managment"
         Balance."Total HR %" := true;
         Balance."Company Name" := CompanyInfo.Name;
         Balance.Date := GetBalanceDate(JobPlanningLine);
-
         if JobPlanningLine."Job Task No." in ['2100'] then
             Balance.Nature := Balance.Nature::ACTUAL
         else
@@ -1025,7 +982,6 @@ codeunit 50103 "PIC Project Managment"
         //  Balance."Profit Sharing Ratio" := PICRec."Profit Sharing Ratio";
 
         PopulateAmountsFromJobLine(Balance, JobPlanningLine, PICRec, true);
-
         if Balance.Date <> 0D then begin
             if IsNewRec then
                 Balance.Insert(true)

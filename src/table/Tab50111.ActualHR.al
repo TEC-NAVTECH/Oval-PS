@@ -44,7 +44,8 @@ table 50111 "Actual HR%"
         field(4; "Staff Name"; Text[100])
         {
             // DataClassification = ToBeClassified;
-            Caption = 'Staff Name';
+            // Caption = 'Staff Name';
+            caption = 'Staff Name (Full)';
             Editable = false;
             FieldClass = FlowField;
             CalcFormula = lookup(Resource.Name where("No." = field("Resource No")));
@@ -58,7 +59,9 @@ table 50111 "Actual HR%"
         field(6; "Project HR%"; Decimal)
         {
             DataClassification = ToBeClassified;
-            Caption = 'Project HR%';
+            //Caption = 'Project HR%';
+            Caption = 'Actual HR%';
+            decimalPlaces = 2 : 2;
         }
         field(7; "Month"; Integer)
         {

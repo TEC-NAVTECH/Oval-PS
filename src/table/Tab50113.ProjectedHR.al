@@ -44,7 +44,7 @@ table 50113 "Projected HR %"
         field(4; "Resource Name"; Text[100])
         {
             //DataClassification = ToBeClassified;
-            Caption = 'Resource Name';
+            Caption = 'Staff Name (Full)';
             Editable = false;
             FieldClass = FlowField;
             CalcFormula = lookup(Resource.Name where("No." = field("Resource No")));
@@ -58,7 +58,8 @@ table 50113 "Projected HR %"
         field(6; "Projected_HRPercent"; Decimal)
         {
             DataClassification = ToBeClassified;
-            Caption = 'Projected_HRPercent';
+            Caption = 'Projected HR%';
+            decimalPlaces = 2 : 2;
         }
         field(7; "Month"; Integer)
         {

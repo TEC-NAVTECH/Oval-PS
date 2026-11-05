@@ -29,7 +29,7 @@ page 50121 "Actual HR% List"
                 field("Staff Name"; Rec."Staff Name")
                 {
                     ApplicationArea = All;
-                    Caption = 'Resource_Name';
+                    //Caption = 'Resource_Name';
                 }
                 field("Project Name"; Rec."Project Name")
                 {

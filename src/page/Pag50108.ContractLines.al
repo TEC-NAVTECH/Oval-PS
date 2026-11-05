@@ -58,26 +58,28 @@ page 50108 "Contract Lines"
                 {
                     ApplicationArea = All;
                 }
-                field(ProjBillMth; Rec.ProjBillMth)
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the ProjBillMth field.', Comment = '%';
-                }
-                field(FinEstBillMth; Rec."FinEstBillMth")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the FinEstBillMth field.', Comment = '%';
-                }
-                field(ActualBillMth; Rec.ActualBillMth)
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the ActualBillMth field.', Comment = '%';
-                }
-                field(ProjRecMth; Rec.ProjRecMth)
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the ProjRecMth field.', Comment = '%';
-                }
+                //VJ05112026 Deleted these field as per cara Oval issues
+
+                // field(ProjBillMth; Rec.ProjBillMth)
+                // {
+                //     ApplicationArea = All;
+                //     ToolTip = 'Specifies the value of the ProjBillMth field.', Comment = '%';
+                // }
+                // field(FinEstBillMth; Rec."FinEstBillMth")
+                // {
+                //     ApplicationArea = All;
+                //     ToolTip = 'Specifies the value of the FinEstBillMth field.', Comment = '%';
+                // }
+                // field(ActualBillMth; Rec.ActualBillMth)
+                // {
+                //     ApplicationArea = All;
+                //     ToolTip = 'Specifies the value of the ActualBillMth field.', Comment = '%';
+                // }
+                // field(ProjRecMth; Rec.ProjRecMth)
+                // {
+                //     ApplicationArea = All;
+                //     ToolTip = 'Specifies the value of the ProjRecMth field.', Comment = '%';
+                // }
 
             }
         }
@@ -129,7 +131,6 @@ page 50108 "Contract Lines"
         // CHANGE "Project Code" if your field has another name.
         // ------------------------------------------------------------
         ProjectNo := Contract."Project Code";
-
         if ProjectNo = '' then
             Error(
                 'Project Code is blank in Contract %1.',
@@ -150,7 +151,6 @@ page 50108 "Contract Lines"
         ProjectSetup.Get();
 
         AccountNo := ProjectSetup."Job Planning Line Account No.";
-
         if AccountNo = '' then
             Error(
                 'Job Planning Lines Account No. is not configured in Project Setup.');
@@ -187,7 +187,6 @@ page 50108 "Contract Lines"
                     AccountNo);
 
                 CreatedCount += 1;
-
             until ContractLine.Next() = 0;
 
         Message(
@@ -290,7 +289,6 @@ page 50108 "Contract Lines"
         JobPlanningLine.Reset();
         JobPlanningLine.SetRange("Job No.", ProjectNo);
         JobPlanningLine.SetRange("Job Task No.", TaskNo);
-
         if JobPlanningLine.FindLast() then
             exit(JobPlanningLine."Line No." + 10000);
 
@@ -305,7 +303,6 @@ page 50108 "Contract Lines"
         JobTask.Reset();
         JobTask.SetRange("Job No.", ProjectNo);
         JobTask.SetRange("Job Task No.", TaskNo);
-
         if not JobTask.FindFirst() then
             Error(
                 'Project %1 does not contain Project Task %2.',
