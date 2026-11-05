@@ -4,17 +4,17 @@ pageextension 50103 JobTaskLineSubformExt extends "Job Task Lines Subform"
     {
         addfirst("&Job")
         {
-            action("Job Planning Lines")
+            action("Project Planning Lines")
             {
                 ApplicationArea = All;
-                Caption = 'Job Planning Lines';
+                Caption = 'Project Planning Lines';
                 Image = JobLines;
                 Scope = "Repeater";
 
                 trigger OnAction()
                 var
                     JobPlanningLine: Record "Job Planning Line";
-                    JobPlanningLines: Page "Job Planning Lines New";
+                    JobPlanningLines: Page "Project Planning lines";
                     JobPlanningLines2000: Page "Job Planning Lines 2000";
                     JobPlanningLines3000: Page "Job Planning Lines 3000";
                     JobPlanningLinesAll: Page "Job Planning Lines for All";
@@ -65,6 +65,10 @@ pageextension 50103 JobTaskLineSubformExt extends "Job Task Lines Subform"
                     l_Jobrec.Get(Rec."Job No.");
                     if Confirm('Calculate Project Cost for Job %1?', false, Rec."Job No.") then
                         CalcProjectCost.CalculateProjectCost(l_Jobrec);
+                    if GuiAllowed then
+                        Message('Project Cost calculation completed for No %1.', l_Jobrec."No.");
+
+
                 end;
             }
         }

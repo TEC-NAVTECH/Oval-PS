@@ -13,9 +13,12 @@ codeunit 50103 "PIC Project Managment"
         CreateTask(JobRec, 2200, 'HR Staff Cost Actual 1.0x');
         CreateTask(JobRec, 2500, 'HR Staff Cost Projected Multiplied');
         CreateTask(JobRec, 2600, 'HR Staff Cost Projected 1.0x');
-        CreateTask(JobRec, 3000, 'Expenses');
-        CreateTask(JobRec, 4000, 'Freelancer');
-        CreateTask(JobRec, 5000, 'Other Project Expenses');
+        // CreateTask(JobRec, 3000, 'Expenses');
+        // CreateTask(JobRec, 4000, 'Freelancer');
+        // CreateTask(JobRec, 5000, 'Other Project Expenses');
+        CreateTask(JobRec, 4000, 'BIS');
+        CreateTask(JobRec, 5000, 'Freelancer');
+        CreateTask(JobRec, 3000, 'Other Project Expenses');//VJ 03Nov2026 changed all three 3000,4000,5000
         //Message('Project Tasks Generated Successfully');
     end;
 
@@ -47,16 +50,17 @@ codeunit 50103 "PIC Project Managment"
     begin
 
         PICProjectBalance.Reset();
-
+        PICProjectBalance.SetCurrentKey("Project Code");
         PICProjectBalance.SetRange("Project Code", l_JobRec."No.");
 
         PICProjectBalance.DeleteAll();
 
 
         JobPlanningLine.Reset();
-
+        jobplanningLine.SetCurrentKey("Job No.");//VJ 05NOV2026
         JobPlanningLine.SetRange("Job No.", l_JobRec."No.");
         JobPlanningLine.SetFilter("Job Task No.", '1100|1200|2100|2200|2500|2600|3000|4000|5000');
+        //JobPlanningLine.SetFilter("Job Task No.", '1200'); //VJ temporary for testing
 
         if JobPlanningLine.FindSet() then
             repeat
@@ -66,6 +70,7 @@ codeunit 50103 "PIC Project Managment"
             until JobPlanningLine.Next() = 0;
 
         ProjectLedEnt.Reset();
+        ProjectLedEnt.SetCurrentKey("Job No.", "Job Task No.", "Entry Type", "Posting Date");
         ProjectLedEnt.SetRange("Job No.", l_JobRec."No.");
         ProjectLedEnt.SetFilter("Job Task No.", '1100|1200|2100|2200|2500|2600|3000|4000|5000');
         ProjectLedEnt.SetRange("Entry Type", ProjectLedEnt."Entry Type"::Usage);
@@ -83,7 +88,7 @@ codeunit 50103 "PIC Project Managment"
 
     begin
         PIC.Reset();
-
+        PIC.SetCurrentKey("Project Code");
         PIC.SetRange("Project Code", ProjectLedgerEntry."Job No.");
 
         if PIC.FindSet() then
@@ -102,16 +107,18 @@ codeunit 50103 "PIC Project Managment"
     var
 
         PIC: Record PIC;
-
+        EndDate: Date;
     begin
-
+        Clear(EndDate);
+        EndDate := GetBalanceDate(JobPlanningLine);//VJ 03Nov2026
         if SkipLine(JobPlanningLine) then
             exit;
 
         PIC.Reset();
-
+        pic.SetCurrentKey("Project Code");
         PIC.SetRange("Project Code", JobPlanningLine."Job No.");
-
+        PIC.SetFilter("End Date", '>%1', EndDate);//VJ 03Nov2026 to take only PIC by filterting date
+        PIC.SetFilter(PIC."Effective Date", '<=%1', EndDate);//VJ 03Nov2026 to take only PIC by filterting date
         if PIC.FindSet() then
             repeat
 
@@ -119,7 +126,8 @@ codeunit 50103 "PIC Project Managment"
                     InsertPICBalance(JobPlanningLine, PIC);
 
             until PIC.Next() = 0;
-        InsertPICBalanceSum(JobPlanningLine, PIC);
+        InsertPICBalanceSum(JobPlanningLine, PIC, true);
+        InsertPICBalanceSum(JobPlanningLine, PIC, false);// VJ 26Oct2026 added this because there is one more line needs to create with Total HR false with all fields remains same
     end;
     //Skip Task 1200
     //Task 1200 with ActualBillMth contains value will not show in PIC Project Balance
@@ -151,6 +159,7 @@ codeunit 50103 "PIC Project Managment"
         //     Error('Job Task No. %1 is not numeric.', JobPlanningLine."Job Task No.");
 
         Balance.Reset();
+        Balance.SetCurrentKey("Project Code", "Job Task No.", "Line No.", project_PIC);//VJ 05Nov2026
         Balance.SetRange("Project Code", JobPlanningLine."Job No.");
         Balance.SetRange("Job Task No.", JobPlanningLine."Job Task No.");
         Balance.SetRange("Line No.", JobPlanningLine."Line No.");
@@ -195,6 +204,7 @@ codeunit 50103 "PIC Project Managment"
             Balance."Job Cost Factor" := JobCostFactor."Job Cost Factor";
 
         Balance."Profit Sharing Ratio" := PICRec."Profit Sharing Ratio";
+        Balance."Job Cost Factor" := JobCostFactor."Job Cost Factor";//VJ 15Oct2026
 
         PopulateAmountsFromJobLine(Balance, JobPlanningLine, PICRec, false);
 
@@ -269,6 +279,7 @@ codeunit 50103 "PIC Project Managment"
         Job: Record Job;
 
         CompanyInfo: Record "Company Information";
+        JobCostFactor: record "Job Cost Factor";  //TEC.VJ.16SEP2026
 
     begin
 
@@ -301,6 +312,8 @@ codeunit 50103 "PIC Project Managment"
 
         // Balance."Job Cost Factor" := PICRec."Profit Sharing Ratio";
         Balance."Profit Sharing Ratio" := PICRec."Profit Sharing Ratio"; //TEC.VJ.16SEP2026
+        if JobCostFactor.Get(JobLedgerEntry."Job No.") then
+            Balance."Job Cost Factor" := JobCostFactor."Job Cost Factor"; //VJ 15Oct2026
 
 
         if Balance.Date <> 0D then
@@ -317,6 +330,7 @@ codeunit 50103 "PIC Project Managment"
         Job: Record Job;
 
         CompanyInfo: Record "Company Information";
+        JobCostFactor: Record "Job Cost Factor";
 
     begin
 
@@ -351,6 +365,9 @@ codeunit 50103 "PIC Project Managment"
         PopulateAmountsFromJobLeedger(Balance, JobLedgerEntry, PICRec, true);
 
         Balance.Category := Balance.Category::Billing;
+        if JobCostFactor.Get(JobLedgerEntry."Job No.") then
+            Balance."Job Cost Factor" := JobCostFactor."Job Cost Factor"; //VJ 15OCT2026
+
 
 
         //Balance."Job Cost Factor" := PICRec."Profit Sharing Ratio";
@@ -359,7 +376,7 @@ codeunit 50103 "PIC Project Managment"
 
     end;
 
-    local procedure InsertPICBalanceSum(JobPlanningLine: Record "Job Planning Line"; PICRec: Record PIC)
+    local procedure InsertPICBalanceSum(JobPlanningLine: Record "Job Planning Line"; PICRec: Record PIC; pTotalHRPercent: Boolean)
 
     var
 
@@ -378,10 +395,12 @@ codeunit 50103 "PIC Project Managment"
         //       Error('Job Task No. %1 is not numeric.', JobPlanningLine."Job Task No.");
 
         Balance.Reset();
+        Balance.SetCurrentKey("Project Code", "Job Task No.", "Line No.", project_PIC);//VJ 05Nov2026
         Balance.SetRange("Project Code", JobPlanningLine."Job No.");
         Balance.SetRange("Job Task No.", JobPlanningLine."Job Task No.");
         Balance.SetRange("Line No.", JobPlanningLine."Line No.");
-        Balance.SetRange("Total HR %", true);
+        //Balance.SetRange("Total HR %", true);
+        Balance.SetRange("Total HR %", pTotalHRPercent);
 
         IsNewRec := not Balance.FindFirst();
         if IsNewRec then begin
@@ -392,7 +411,8 @@ codeunit 50103 "PIC Project Managment"
         end else
             exit;
 
-        Balance."Total HR %" := true;
+        //Balance."Total HR %" := true;
+        Balance."Total HR %" := pTotalHRPercent;// VJ 26Oct2026 added this because there is one more line needs to create with Total HR false with all fields remains same
         Balance."Company Name" := CompanyInfo.Name;
         Balance.Date := GetBalanceDate(JobPlanningLine);
 
@@ -417,6 +437,8 @@ codeunit 50103 "PIC Project Managment"
         Clear(Balance."Job Cost Factor");
         if JobCostFactor.Get(JobPlanningLine."Job No.") and (JobPlanningLine."Job Task No." = '2200') then
             Balance."Job Cost Factor" := JobCostFactor."Job Cost Factor";
+
+        Balance."Job Cost Factor" := JobCostFactor."Job Cost Factor"; //VJ 15Oct2026
 
         Balance."Profit Sharing Ratio" := 100;
         // Balance."Profit Sharing Ratio" := PICRec."Profit Sharing Ratio";
@@ -694,7 +716,14 @@ codeunit 50103 "PIC Project Managment"
                                 // if JobTask."Job Task No." = '2100' then
                                 //     Quantity := (round(ActualHRList."Project HR%" / 100, 0.01) * 200)
                                 // else
-                                Quantity := round((((ActualHRList."Project HR%" / 100) * 200) * JobCostFactor."Job Cost Factor"), 0.01);
+                                //Quantity := round((((ActualHRList."Project HR%" / 100) * 200) * JobCostFactor."Job Cost Factor"), 0.01);
+
+                                //VJ 21oct2026 added code for task 2200 multiply by job cost factor
+                                if JobTask."Job Task No." = '2200' then
+                                    Quantity := round(((ActualHRList."Project HR%" / 100) * 200), 0.01)
+                                else
+                                    Quantity := round((((ActualHRList."Project HR%" / 100) * 200) * JobCostFactor."Job Cost Factor"), 0.01);
+                                //VJ 21oct2026 added code for task 2200 multiply by job cost factor
 
                                 TotalCost := UnitCost * Quantity;
                             end;
@@ -732,12 +761,17 @@ codeunit 50103 "PIC Project Managment"
                     ProjectedHRList.Reset();
                     // ProjectedHRList.SetRange("Staff No", ActualHRList."Staff No"rojectedHRList.SetRange("Project Code", JobTask."Job No.");
                     //ProjectedHRList.Setfilter(Month, '>=%1', l_Month);
-                    ProjectedHRList.Setfilter(Year, '>=%1', l_Year);
+                    ProjectedHRList.SetRange("Project Code", l_Jobrec."No.");//VJ 21Oct2026 added as per Cara
+                                                                             //ProjectedHRList.Setfilter(Year, '>=%1', l_Year); //VJ 21Oct2026 commented the filter as per Cara as no date filter required
+
                     if ProjectedHRList.Findset() then begin
                         repeat
                             UnitCost := 0;
                             Quantity := 0;
                             TotalCost := 0;
+                            JobCostFactor.Reset();
+                            JobCostFactor.SetRange("Project Code", l_Jobrec."No.");
+                            if JobCostFactor.FindLast() then;
                             SalaryHistory.Reset();
                             salaryHistory.setrange(Type, salaryHistory.Type::Resource);
                             salaryHistory.SetRange(Code, ProjectedHRList."Resource No");
@@ -745,10 +779,17 @@ codeunit 50103 "PIC Project Managment"
                             salaryHistory.SetRange(Year, ProjectedHRList.Year);
                             if salaryHistory.findfirst() then begin
                                 UnitCost := SalaryHistory."Monthly Salary" / 200;
-                                Quantity := ProjectedHRList."Projected_HRPercent";
+                                //VJ 21oct2026 add logic as per cara chat on teams
+                                //Quantity := ProjectedHRList."Projected_HRPercent";
+                                if JobTask."Job Task No." = '2600' then
+                                    Quantity := round(((ProjectedHRList."Projected_HRPercent" / 100) * 200), 0.01)
+                                else
+                                    Quantity := round((((ProjectedHRList."Projected_HRPercent" / 100) * 200) * JobCostFactor."Job Cost Factor"), 0.01);
+                                //VJ 21oct2026 add logic as per cara chat on teams
                             end;
                             TotalCost := UnitCost * Quantity;
                             if (TotalCost <> 0) and (JobTask."Job Task No." = '2500') then begin
+
                                 InsertJobPlanningLine(
                                     l_Jobrec."No.",
                                     JobTask."Job Task No.",
@@ -765,7 +806,7 @@ codeunit 50103 "PIC Project Managment"
                                     JobTask."Job Task No.",
                                     ProjectedHRList."Resource No",
                                     UnitCost,
-                                    Quantity * 200,
+                                    Quantity,
                                     '', DMY2Date(1, ProjectedHRList.Month, ProjectedHRList.Year));
                             end;
                         until ProjectedHRList.Next() = 0;
@@ -773,8 +814,7 @@ codeunit 50103 "PIC Project Managment"
                     end;
                 end;
             until JobTask.Next() = 0;
-        if GuiAllowed then
-            Message('Project Cost calculation completed for Job %1.', l_Jobrec."No.");
+
     end;
 
     local procedure InsertJobPlanningLine(

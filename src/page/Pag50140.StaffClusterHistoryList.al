@@ -47,6 +47,7 @@ page 50140 "Staff Cluster History List"
                 field(Cluster_Description; Rec.Cluster_Description)
                 {
                     ToolTip = 'Specifies the value of the Cluster Description field.', Comment = '%';
+                    Visible = false;
                 }
             }
         }

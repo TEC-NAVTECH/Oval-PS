@@ -1,8 +1,9 @@
-page 50109 "Job Planning Lines New"
+page 50109 "Project Planning lines"
 {
     // version NAVW113.00
     AutoSplitKey = true;
-    Caption = 'Job Planning Lines New';
+    // Caption = 'Job Planning Lines New';
+    Caption = 'Project Planning lines';
     //DataCaptionExpression = Caption;
     PageType = List;
     PromotedActionCategories = 'New,Process,Report,Outlook';
@@ -16,72 +17,116 @@ page 50109 "Job Planning Lines New"
         {
             repeater(General)
             {
-                field("Job No."; rec."Job No.")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the number of the related job.';
-                    Visible = false;
-                }
+                // field("Job No."; rec."Job No.") 
+                // {
+                //     ApplicationArea = All;
+                //     ToolTip = 'Specifies the number of the related job.';
+                //     Visible = false;
+                // }
                 field("Job Task No."; rec."Job Task No.")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the number of the related job task.';
                     //Visible = JobTaskNoVisible;
                 }
-                field("Line Type"; rec."Line Type")
+                field("Job No."; rec."Job No.")
                 {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the type of planning line.';
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the number of the related job.';
+                    //Visible = false; //VJ22102026 Commented
                 }
-                field("Usage Link"; rec."Usage Link")
+                field("Stage Payment Code"; rec."Stage Payment Code")
                 {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies whether the Usage Link field applies to the job planning line. When this check box is selected, usage entries are linked to the job planning line. Selecting this check box creates a link to the job planning line from places where usage has been posted, such as the job journal or a purchase line. You can select this check box only if the line type of the job planning line is Budget or Both Budget and Billable.';
-                    Visible = false;
-
-                    trigger OnValidate()
-                    begin
-                        UsageLinkOnAfterValidate();
-                    end;
+                    ApplicationArea = All;
                 }
-                field("Planning Date"; rec."Planning Date")
+                field("Contract Code"; rec."Contract Code")
                 {
-                    ApplicationArea = Jobs;
-                    //Editable = PlanningDateEditable;
-                    //Visible = false;
-                    ToolTip = 'Specifies the date of the planning line. You can use the planning date for filtering the totals of the job, for example, if you want to see the scheduled usage for a specific month of the year.';
-
-                    trigger OnValidate()
-                    begin
-                        PlanningDateOnAfterValidate();
-                    end;
+                    ApplicationArea = All;
                 }
-                field("Planned Delivery Date"; rec."Planned Delivery Date")
+                field("Line No."; rec."Line No.")
                 {
                     ApplicationArea = Jobs;
-                    Visible = false;
-                    ToolTip = 'Specifies the date that is planned to deliver the item connected to the job planning line. For a resource, the planned delivery date is the date that the resource performs services with respect to the job.';
+                    ToolTip = 'Specifies the planning line''s entry number.';
+                    // Visible = false; //VJ22102026 Commented
                 }
-                field("Currency Date"; rec."Currency Date")
+                field(Description; rec.Description)
                 {
                     ApplicationArea = Jobs;
-                    //Editable = CurrencyDateEditable;
-                    ToolTip = 'Specifies the date that will be used to find the exchange rate for the currency in the Currency Date field.';
+                    //Editable = DescriptionEditable;
+                    ToolTip = 'Specifies the name of the resource, item, or G/L account to which this entry applies. You can change the description. A maximum of 50 characters, both numbers and letters, are allowed.';
+                }
+                field("Currency Code"; Rec."Currency Code")
+                {
+                    ToolTip = 'Specifies the value of the Currency Code field.', Comment = '%';
+                    Editable = true;
+                }
+                field("Currency Code 2"; rec."Currency Code 2")
+                {
+                    ApplicationArea = Jobs;
+                    //Editable = false;
+                    Caption = 'Currency Code';
                     //Visible = false;
                 }
-                field("Document No."; rec."Document No.")
+                field("Unit Price"; rec."Unit Price")
                 {
                     ApplicationArea = Jobs;
-                    //Editable = DocumentNoEditable;
-                    Visible = false;
-                    ToolTip = 'Specifies a document number for the planning line.';
+                    //Editable = UnitPriceEditable;
+                    ToolTip = 'Specifies the price of one unit of the item or resource. You can enter a price manually or have it entered according to the Price/Profit Calculation field on the related card.';
+                    //Visible = false;
+                    Editable = true; //VJ
+                }
+                field("Tax expense FCY"; rec."Tax expense FCY")
+                {
+                    ApplicationArea = All;
+                }
+                field("Subcon expense FCY"; rec."Subcon expense FCY")
+                {
+                    ApplicationArea = All;
+                }
+                field("Bank Charge FCY"; rec."Bank Charge FCY")
+                {
+                    ApplicationArea = All;
+                }
+                field("Net amount FCY"; rec."Net amount FCY")
+                {
+                    ApplicationArea = All;
+                }
+                field("Currency Factor"; Rec."Currency Factor")
+                {
+                    ToolTip = 'Specifies the value of the Currency Factor field.', Comment = '%';
+                    Editable = true;
+                }
+                field("Net Amount LCY"; rec."Net Amount LCY")
+                {
+                    ApplicationArea = All;
+                }
+                field("Projected Bill Date"; rec."Projected Bill Date")
+                {
+                    ApplicationArea = All;
+                }
+                field(FINESTBILLMTH; rec.FINESTBILLMTH)
+                {
+                    ApplicationArea = All;
+                }
+                field(ActualBillMth; Rec.ActualBillMth)
+                {
+                    ToolTip = 'Specifies the value of the ActualBillMth field.', Comment = '%';
+                }
+                field(ProjRecMth; Rec.ProjRecMth)
+                {
+                    ToolTip = 'Specifies the value of the ProjRecMth field.', Comment = '%';
+                }
+                field("Actual Payment Date"; rec."Actual Payment Date")
+                {
+                    ApplicationArea = All;
+                    //Editable = false;
                 }
                 field(Type; rec.Type)
                 {
                     ApplicationArea = Jobs;
                     //Editable = TypeEditable;
                     ToolTip = 'Specifies the type of account to which the planning line relates.';
-                    Visible = false;
+                    //Visible = false;//VJ22102026 Commented
 
                     trigger OnValidate()
                     begin
@@ -100,352 +145,449 @@ page 50109 "Job Planning Lines New"
                         NoOnAfterValidate();
                     end;
                 }
-                field("Customer No."; rec."Customer No.")
-                {
-                    ApplicationArea = All;
-                    //Visible = false;
-                }
-                field("Currency Code 2"; rec."Currency Code 2")
+                field("Planning Date"; rec."Planning Date")
                 {
                     ApplicationArea = Jobs;
-                    //Editable = false;
-                    Caption = 'Currency Code';
+                    //Editable = PlanningDateEditable;
                     //Visible = false;
-                }
-                field("Exchange Rate"; rec."Exchange Rate")
-                {
-                    ApplicationArea = All;
-                }
-                field("Qty. Invoiced"; rec."Qty. Invoiced")
-                {
-                    Visible = false;
-                }
-                field(Quantity; rec.Quantity)
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the number of units of the resource, item, or general ledger account that should be specified on the planning line. If you later change the No., the quantity you have entered remains on the line.';
+                    ToolTip = 'Specifies the date of the planning line. You can use the planning date for filtering the totals of the job, for example, if you want to see the scheduled usage for a specific month of the year.';
 
-                    //Visible = false;
                     trigger OnValidate()
                     begin
-                        QuantityOnAfterValidate();
+                        PlanningDateOnAfterValidate();
                     end;
-                }
-                field("Unit Price"; rec."Unit Price")
-                {
-                    ApplicationArea = Jobs;
-                    //Editable = UnitPriceEditable;
-                    ToolTip = 'Specifies the price of one unit of the item or resource. You can enter a price manually or have it entered according to the Price/Profit Calculation field on the related card.';
-                    //Visible = false;
-                    Editable = true; //VJ
-                }
-                field("Total Price"; rec."Total Price")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the total price in the job currency on the planning line.';
-                    //Visible = false;
-                }
-                field("Tax expense FCY"; rec."Tax expense FCY")
-                {
-                    ApplicationArea = All;
-                }
-                field("Subcon expense FCY"; rec."Subcon expense FCY")
-                {
-                    ApplicationArea = All;
-                }
-                field("Bank Charge FCY"; rec."Bank Charge FCY")
-                {
-                    ApplicationArea = All;
-                }
-                field("Net amount FCY"; rec."Net amount FCY")
-                {
-                    ApplicationArea = All;
-                }
-                field("Net Amount LCY"; rec."Net Amount LCY")
-                {
-                    ApplicationArea = All;
-                }
-                field("SCC issue date"; rec."SCC issue date")
-                {
-                    ApplicationArea = All;
-                }
-                field("Deliverable Date"; rec."Deliverable Date")
-                {
-                    ApplicationArea = All;
-                }
-                field("Contract Code"; rec."Contract Code")
-                {
-                    ApplicationArea = All;
-                }
-                field("Projected Bill Date"; rec."Projected Bill Date")
-                {
-                    ApplicationArea = All;
-                }
-                field(FINESTBILLMTH; rec.FINESTBILLMTH)
-                {
-                    ApplicationArea = All;
-                }
-                field("Projected Payment Date"; rec."Projected Payment Date")
-                {
-                    ApplicationArea = All;
-                }
-                field("Stage Payment Code"; rec."Stage Payment Code")
-                {
-                    ApplicationArea = All;
-                }
-                field("Total Hours Percent"; rec."Total Hours Percent")
-                {
-                    ApplicationArea = All;
-                    Visible = false;
-                }
-                field("Line No."; rec."Line No.")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the planning line''s entry number.';
-                    Visible = false;
-                }
-                field(Description; rec.Description)
-                {
-                    ApplicationArea = Jobs;
-                    //Editable = DescriptionEditable;
-                    ToolTip = 'Specifies the name of the resource, item, or G/L account to which this entry applies. You can change the description. A maximum of 50 characters, both numbers and letters, are allowed.';
-                }
-                field("Actual Invoice Date"; rec."Actual Invoice Date")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field("Actual Payment Date"; rec."Actual Payment Date")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
                 }
                 field("Invoice No."; rec."Invoice No.")
                 {
                     ApplicationArea = All;
                     Caption = 'Invoice No.';
-                    Editable = false;
+                    Editable = true;
+                    //  Editable = false;
                 }
-                field("Gen. Bus. Posting Group"; rec."Gen. Bus. Posting Group")
+                field("User ID"; rec."User ID")
                 {
                     ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the vendor''s or customer''s trade type to link transactions made for this business partner with the appropriate general ledger account according to the general posting setup.';
-                    Visible = false;
+                    ToolTip = 'Specifies the ID of the user who posted the entry, to be used, for example, in the change log.';
+                    // Visible = false;//VJ22102026 Commented
                 }
-                field("Gen. Prod. Posting Group"; rec."Gen. Prod. Posting Group")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the item''s product type to link transactions made for this item with the appropriate general ledger account according to the general posting setup.';
-                    Visible = false;
-                }
-                field("Variant Code"; rec."Variant Code")
-                {
-                    ApplicationArea = Planning;
-                    //Editable = VariantCodeEditable;
-                    ToolTip = 'Specifies the variant of the item on the line.';
-                    Visible = false;
+                // field("Line Type"; rec."Line Type")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the type of planning line.';
+                // }
+                // field("Usage Link"; rec."Usage Link")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies whether the Usage Link field applies to the job planning line. When this check box is selected, usage entries are linked to the job planning line. Selecting this check box creates a link to the job planning line from places where usage has been posted, such as the job journal or a purchase line. You can select this check box only if the line type of the job planning line is Budget or Both Budget and Billable.';
+                //     Visible = false;
 
-                    trigger OnValidate()
-                    begin
-                        VariantCodeOnAfterValidate();
-                    end;
-                }
-                field("Location Code"; rec."Location Code")
-                {
-                    ApplicationArea = Location;
-                    //Editable = LocationCodeEditable;
-                    ToolTip = 'Specifies a location code for an item.';
-                    Visible = false;
+                //     trigger OnValidate()
+                //     begin
+                //         UsageLinkOnAfterValidate();
+                //     end;
+                // }
+                // field("Planning Date"; rec."Planning Date")
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = PlanningDateEditable;
+                //     //Visible = false;
+                //     ToolTip = 'Specifies the date of the planning line. You can use the planning date for filtering the totals of the job, for example, if you want to see the scheduled usage for a specific month of the year.';
 
-                    trigger OnValidate()
-                    begin
-                        LocationCodeOnAfterValidate();
-                    end;
-                }
-                field("Work Type Code"; rec."Work Type Code")
-                {
-                    ApplicationArea = Jobs;
-                    //Editable = WorkTypeCodeEditable;
-                    ToolTip = 'Specifies which work type the resource applies to. Prices are updated based on this entry.';
-                    Visible = false;
-                }
-                field("Unit of Measure Code"; rec."Unit of Measure Code")
-                {
-                    ApplicationArea = Jobs;
-                    //Editable = UnitOfMeasureCodeEditable;
-                    ToolTip = 'Specifies how each unit of the item or resource is measured, such as in pieces or hours. By default, the value in the Base Unit of Measure field on the item or resource card is inserted.';
-                    Visible = false;
+                //     trigger OnValidate()
+                //     begin
+                //         PlanningDateOnAfterValidate();
+                //     end;
+                // }
+                // field("Planned Delivery Date"; rec."Planned Delivery Date")
+                // {
+                //     ApplicationArea = Jobs;
+                //     Visible = false;
+                //     ToolTip = 'Specifies the date that is planned to deliver the item connected to the job planning line. For a resource, the planned delivery date is the date that the resource performs services with respect to the job.';
+                // }
+                // field("Currency Date"; rec."Currency Date")
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = CurrencyDateEditable;
+                //     ToolTip = 'Specifies the date that will be used to find the exchange rate for the currency in the Currency Date field.';
+                //     //Visible = false;
+                // }
+                // field("Document No."; rec."Document No.")
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = DocumentNoEditable;
+                //     Visible = false;
+                //     ToolTip = 'Specifies a document number for the planning line.';
+                // }
+                // field(Type; rec.Type)
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = TypeEditable;
+                //     ToolTip = 'Specifies the type of account to which the planning line relates.';
+                //     Visible = false;
 
-                    trigger OnValidate()
-                    begin
-                        UnitofMeasureCodeOnAfterValida();
-                    end;
-                }
-                field(Reserve; rec.Reserve)
-                {
-                    ApplicationArea = Reservation;
-                    ToolTip = 'Specifies whether or not a reservation can be made for items on the current line. The field is not applicable if the Type field is set to Resource, Cost, or G/L Account.';
-                    Visible = false;
+                //     trigger OnValidate()
+                //     begin
+                //         NoOnAfterValidate();
+                //     end;
+                // }
+                // field("No."; rec."No.")
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = NoEditable;
+                //     ToolTip = 'Specifies the number of the account to which the resource, item or general ledger account is posted, depending on your selection in the Type field.';
 
-                    trigger OnValidate()
-                    begin
-                        ReserveOnAfterValidate();
-                    end;
-                }
-                field("Reserved Quantity"; rec."Reserved Quantity")
-                {
-                    ApplicationArea = Reservation;
-                    ToolTip = 'Specifies the quantity of the item that is reserved for the job planning line.';
-                    Visible = false;
-                }
-                field("Quantity (Base)"; rec."Quantity (Base)")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the quantity expressed in the base units of measure.';
-                    Visible = false;
-                }
-                field("Remaining Qty."; rec."Remaining Qty.")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the remaining quantity of the resource, item, or G/L Account that remains to complete a job. The quantity is calculated as the difference between Quantity and Qty. Posted.';
-                    Visible = false;
-                }
-                field("Direct Unit Cost (LCY)"; rec."Direct Unit Cost (LCY)")
-                {
-                    ApplicationArea = Jobs;
-                    Editable = false;
-                    ToolTip = 'Specifies the cost, in the local currency, of one unit of the selected item or resource.';
-                    Visible = false;
-                }
-                field("Unit Cost"; rec."Unit Cost")
-                {
-                    ApplicationArea = Jobs;
-                    //Editable = UnitCostEditable;
-                    ToolTip = 'Specifies the cost of one unit of the item or resource on the line.';
-                    Visible = false;
-                }
-                field("Unit Cost (LCY)"; rec."Unit Cost (LCY)")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the cost, in LCY, of one unit of the item or resource on the line.';
-                    Visible = false;
-                }
-                field("Total Cost"; rec."Total Cost")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the total cost for the planning line. The total cost is in the job currency, which comes from the Currency Code field in the Job Card.';
-                    Visible = false;
-                }
-                field("Remaining Total Cost"; rec."Remaining Total Cost")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the remaining total cost for the planning line. The total cost is in the job currency, which comes from the Currency Code field in the Job Card.';
-                    Visible = false;
-                }
-                field("Total Cost (LCY)"; rec."Total Cost (LCY)")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the total cost for the planning line. The amount is in the local currency.';
-                    Visible = false;
-                }
-                field("Remaining Total Cost (LCY)"; rec."Remaining Total Cost (LCY)")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the remaining total cost (LCY) for the planning line. The amount is in the local currency.';
-                    Visible = false;
-                }
-                field("Unit Price (LCY)"; rec."Unit Price (LCY)")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the price, in LCY, of one unit of the item or resource. You can enter a price manually or have it entered according to the Price/Profit Calculation field on the related card.';
-                    Visible = false;
-                }
-                field("Line Amount"; rec."Line Amount")
-                {
-                    ApplicationArea = Jobs;
-                    //Editable = LineAmountEditable;
-                    ToolTip = 'Specifies the amount that will be posted to the job ledger.';
-                    Visible = false;
-                }
-                field("Remaining Line Amount"; rec."Remaining Line Amount")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the amount that will be posted to the job ledger.';
-                    Visible = false;
-                }
-                field("Line Amount (LCY)"; rec."Line Amount (LCY)")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the amount in the local currency that will be posted to the job ledger.';
-                    Visible = false;
-                }
-                field("Remaining Line Amount (LCY)"; rec."Remaining Line Amount (LCY)")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the amount in the local currency that will be posted to the job ledger.';
-                    Visible = false;
-                }
-                field("Line Discount Amount"; rec."Line Discount Amount")
-                {
-                    ApplicationArea = Jobs;
-                    //Editable = LineDiscountAmountEditable;
-                    ToolTip = 'Specifies the discount amount that is granted for the item on the line.';
-                    Visible = false;
-                }
-                field("Line Discount %"; rec."Line Discount %")
-                {
-                    ApplicationArea = Jobs;
-                    //Editable = LineDiscountPctEditable;
-                    ToolTip = 'Specifies the discount percentage that is granted for the item on the line.';
-                    Visible = false;
-                }
-                field("Qty. Posted"; rec."Qty. Posted")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the quantity that has been posted to the job ledger, if the Usage Link check box has been selected.';
-                    Visible = false;
-                }
-                field("Posted Total Cost"; rec."Posted Total Cost")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the total cost that has been posted to the job ledger, if the Usage Link check box has been selected.';
-                    Visible = false;
-                }
-                field("Posted Total Cost (LCY)"; rec."Posted Total Cost (LCY)")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the total cost (LCY) that has been posted to the job ledger, if the Usage Link check box has been selected.';
-                    Visible = false;
-                }
-                field("Posted Line Amount"; rec."Posted Line Amount")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the amount that has been posted to the job ledger. This field is only filled in if the Apply Usage Link check box selected on the job card.';
-                    Visible = false;
-                }
-                field("Posted Line Amount (LCY)"; rec."Posted Line Amount (LCY)")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the amount in the local currency that has been posted to the job ledger. This field is only filled in if the Apply Usage Link check box selected on the job card.';
-                    Visible = false;
-                }
-                field("Qty. Transferred to Invoice"; rec."Qty. Transferred to Invoice")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the quantity that has been transferred to a sales invoice or credit memo.';
-                    Visible = false;
+                //     //Visible = false;
+                //     trigger OnValidate()
+                //     begin
+                //         NoOnAfterValidate();
+                //     end;
+                // }
+                // field("Customer No."; rec."Customer No.")
+                // {
+                //     ApplicationArea = All;
+                //     //Visible = false;
+                // }
+                // field("Currency Code 2"; rec."Currency Code 2")
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = false;
+                //     Caption = 'Currency Code';
+                //     //Visible = false;
+                // }
+                // field("Exchange Rate"; rec."Exchange Rate")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("Qty. Invoiced"; rec."Qty. Invoiced")
+                // {
+                //     Visible = false;
+                // }
+                // field(Quantity; rec.Quantity)
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the number of units of the resource, item, or general ledger account that should be specified on the planning line. If you later change the No., the quantity you have entered remains on the line.';
 
-                    trigger OnDrillDown()
-                    begin
-                        rec.DrillDownJobInvoices();
-                    end;
-                }
-                field("Qty. to Transfer to Invoice"; rec."Qty. to Transfer to Invoice")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the quantity you want to transfer to the sales invoice or credit memo. The value in this field is calculated as Quantity - Qty. Transferred to Invoice.';
-                    Visible = false;
-                }
+                //     //Visible = false;
+                //     trigger OnValidate()
+                //     begin
+                //         QuantityOnAfterValidate();
+                //     end;
+                // }
+                // field("Unit Price"; rec."Unit Price")
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = UnitPriceEditable;
+                //     ToolTip = 'Specifies the price of one unit of the item or resource. You can enter a price manually or have it entered according to the Price/Profit Calculation field on the related card.';
+                //     //Visible = false;
+                //     Editable = true; //VJ
+                // }
+                // field("Total Price"; rec."Total Price")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the total price in the job currency on the planning line.';
+                //     //Visible = false;
+                // }
+                // field("Tax expense FCY"; rec."Tax expense FCY")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("Subcon expense FCY"; rec."Subcon expense FCY")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("Bank Charge FCY"; rec."Bank Charge FCY")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("Net amount FCY"; rec."Net amount FCY")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("Net Amount LCY"; rec."Net Amount LCY")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("SCC issue date"; rec."SCC issue date")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("Deliverable Date"; rec."Deliverable Date")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("Contract Code"; rec."Contract Code")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("Projected Bill Date"; rec."Projected Bill Date")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field(FINESTBILLMTH; rec.FINESTBILLMTH)
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("Projected Payment Date"; rec."Projected Payment Date")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("Stage Payment Code"; rec."Stage Payment Code")
+                // {
+                //     ApplicationArea = All;
+                // }
+                // field("Total Hours Percent"; rec."Total Hours Percent")
+                // {
+                //     ApplicationArea = All;
+                //     Visible = false;
+                // }
+                // field("Line No."; rec."Line No.")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the planning line''s entry number.';
+                //     Visible = false;
+                // }
+                // field(Description; rec.Description)
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = DescriptionEditable;
+                //     ToolTip = 'Specifies the name of the resource, item, or G/L account to which this entry applies. You can change the description. A maximum of 50 characters, both numbers and letters, are allowed.';
+                // }
+                // field("Actual Invoice Date"; rec."Actual Invoice Date")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = false;
+                // }
+                // field("Actual Payment Date"; rec."Actual Payment Date")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = false;
+                // }
+                // field("Invoice No."; rec."Invoice No.")
+                // {
+                //     ApplicationArea = All;
+                //     Caption = 'Invoice No.';
+                //     Editable = false;
+                // }
+                // field("Gen. Bus. Posting Group"; rec."Gen. Bus. Posting Group")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the vendor''s or customer''s trade type to link transactions made for this business partner with the appropriate general ledger account according to the general posting setup.';
+                //     Visible = false;
+                // }
+                // field("Gen. Prod. Posting Group"; rec."Gen. Prod. Posting Group")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the item''s product type to link transactions made for this item with the appropriate general ledger account according to the general posting setup.';
+                //     Visible = false;
+                // }
+                // field("Variant Code"; rec."Variant Code")
+                // {
+                //     ApplicationArea = Planning;
+                //     //Editable = VariantCodeEditable;
+                //     ToolTip = 'Specifies the variant of the item on the line.';
+                //     Visible = false;
+
+                //     trigger OnValidate()
+                //     begin
+                //         VariantCodeOnAfterValidate();
+                //     end;
+                // }
+                // field("Location Code"; rec."Location Code")
+                // {
+                //     ApplicationArea = Location;
+                //     //Editable = LocationCodeEditable;
+                //     ToolTip = 'Specifies a location code for an item.';
+                //     Visible = false;
+
+                //     trigger OnValidate()
+                //     begin
+                //         LocationCodeOnAfterValidate();
+                //     end;
+                // }
+                // field("Work Type Code"; rec."Work Type Code")
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = WorkTypeCodeEditable;
+                //     ToolTip = 'Specifies which work type the resource applies to. Prices are updated based on this entry.';
+                //     Visible = false;
+                // }
+                // field("Unit of Measure Code"; rec."Unit of Measure Code")
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = UnitOfMeasureCodeEditable;
+                //     ToolTip = 'Specifies how each unit of the item or resource is measured, such as in pieces or hours. By default, the value in the Base Unit of Measure field on the item or resource card is inserted.';
+                //     Visible = false;
+
+                //     trigger OnValidate()
+                //     begin
+                //         UnitofMeasureCodeOnAfterValida();
+                //     end;
+                // }
+                // field(Reserve; rec.Reserve)
+                // {
+                //     ApplicationArea = Reservation;
+                //     ToolTip = 'Specifies whether or not a reservation can be made for items on the current line. The field is not applicable if the Type field is set to Resource, Cost, or G/L Account.';
+                //     Visible = false;
+
+                //     trigger OnValidate()
+                //     begin
+                //         ReserveOnAfterValidate();
+                //     end;
+                // }
+                // field("Reserved Quantity"; rec."Reserved Quantity")
+                // {
+                //     ApplicationArea = Reservation;
+                //     ToolTip = 'Specifies the quantity of the item that is reserved for the job planning line.';
+                //     Visible = false;
+                // }
+                // field("Quantity (Base)"; rec."Quantity (Base)")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the quantity expressed in the base units of measure.';
+                //     Visible = false;
+                // }
+                // field("Remaining Qty."; rec."Remaining Qty.")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the remaining quantity of the resource, item, or G/L Account that remains to complete a job. The quantity is calculated as the difference between Quantity and Qty. Posted.';
+                //     Visible = false;
+                // }
+                // field("Direct Unit Cost (LCY)"; rec."Direct Unit Cost (LCY)")
+                // {
+                //     ApplicationArea = Jobs;
+                //     Editable = false;
+                //     ToolTip = 'Specifies the cost, in the local currency, of one unit of the selected item or resource.';
+                //     Visible = false;
+                // }
+                // field("Unit Cost"; rec."Unit Cost")
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = UnitCostEditable;
+                //     ToolTip = 'Specifies the cost of one unit of the item or resource on the line.';
+                //     Visible = false;
+                // }
+                // field("Unit Cost (LCY)"; rec."Unit Cost (LCY)")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the cost, in LCY, of one unit of the item or resource on the line.';
+                //     Visible = false;
+                // }
+                // field("Total Cost"; rec."Total Cost")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the total cost for the planning line. The total cost is in the job currency, which comes from the Currency Code field in the Job Card.';
+                //     Visible = false;
+                // }
+                // field("Remaining Total Cost"; rec."Remaining Total Cost")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the remaining total cost for the planning line. The total cost is in the job currency, which comes from the Currency Code field in the Job Card.';
+                //     Visible = false;
+                // }
+                // field("Total Cost (LCY)"; rec."Total Cost (LCY)")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the total cost for the planning line. The amount is in the local currency.';
+                //     Visible = false;
+                // }
+                // field("Remaining Total Cost (LCY)"; rec."Remaining Total Cost (LCY)")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the remaining total cost (LCY) for the planning line. The amount is in the local currency.';
+                //     Visible = false;
+                // }
+                // field("Unit Price (LCY)"; rec."Unit Price (LCY)")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the price, in LCY, of one unit of the item or resource. You can enter a price manually or have it entered according to the Price/Profit Calculation field on the related card.';
+                //     Visible = false;
+                // }
+                // field("Line Amount"; rec."Line Amount")
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = LineAmountEditable;
+                //     ToolTip = 'Specifies the amount that will be posted to the job ledger.';
+                //     Visible = false;
+                // }
+                // field("Remaining Line Amount"; rec."Remaining Line Amount")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the amount that will be posted to the job ledger.';
+                //     Visible = false;
+                // }
+                // field("Line Amount (LCY)"; rec."Line Amount (LCY)")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the amount in the local currency that will be posted to the job ledger.';
+                //     Visible = false;
+                // }
+                // field("Remaining Line Amount (LCY)"; rec."Remaining Line Amount (LCY)")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the amount in the local currency that will be posted to the job ledger.';
+                //     Visible = false;
+                // }
+                // field("Line Discount Amount"; rec."Line Discount Amount")
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = LineDiscountAmountEditable;
+                //     ToolTip = 'Specifies the discount amount that is granted for the item on the line.';
+                //     Visible = false;
+                // }
+                // field("Line Discount %"; rec."Line Discount %")
+                // {
+                //     ApplicationArea = Jobs;
+                //     //Editable = LineDiscountPctEditable;
+                //     ToolTip = 'Specifies the discount percentage that is granted for the item on the line.';
+                //     Visible = false;
+                // }
+                // field("Qty. Posted"; rec."Qty. Posted")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the quantity that has been posted to the job ledger, if the Usage Link check box has been selected.';
+                //     Visible = false;
+                // }
+                // field("Posted Total Cost"; rec."Posted Total Cost")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the total cost that has been posted to the job ledger, if the Usage Link check box has been selected.';
+                //     Visible = false;
+                // }
+                // field("Posted Total Cost (LCY)"; rec."Posted Total Cost (LCY)")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the total cost (LCY) that has been posted to the job ledger, if the Usage Link check box has been selected.';
+                //     Visible = false;
+                // }
+                // field("Posted Line Amount"; rec."Posted Line Amount")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the amount that has been posted to the job ledger. This field is only filled in if the Apply Usage Link check box selected on the job card.';
+                //     Visible = false;
+                // }
+                // field("Posted Line Amount (LCY)"; rec."Posted Line Amount (LCY)")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the amount in the local currency that has been posted to the job ledger. This field is only filled in if the Apply Usage Link check box selected on the job card.';
+                //     Visible = false;
+                // }
+                // field("Qty. Transferred to Invoice"; rec."Qty. Transferred to Invoice")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the quantity that has been transferred to a sales invoice or credit memo.';
+                //     Visible = false;
+
+                //     trigger OnDrillDown()
+                //     begin
+                //         rec.DrillDownJobInvoices();
+                //     end;
+                // }
+                // field("Qty. to Transfer to Invoice"; rec."Qty. to Transfer to Invoice")
+                // {
+                //     ApplicationArea = Jobs;
+                //     ToolTip = 'Specifies the quantity you want to transfer to the sales invoice or credit memo. The value in this field is calculated as Quantity - Qty. Transferred to Invoice.';
+                //     Visible = false;
+                // }
                 //field("Qty. Invoiced"; "Qty. Invoiced")
                 //{
                 //    ApplicationArea = Jobs;
@@ -457,98 +599,98 @@ page 50109 "Job Planning Lines New"
                 //  end;
                 // }
             }
-            field("Qty. to Invoice"; rec."Qty. to Invoice")
-            {
-                ApplicationArea = Jobs;
-                ToolTip = 'Specifies the quantity that remains to be invoiced. It is calculated as Quantity - Qty. Invoiced.';
-                Visible = false;
-            }
-            field("Invoiced Amount (LCY)"; rec."Invoiced Amount (LCY)")
-            {
-                ApplicationArea = Jobs;
-                ToolTip = 'Specifies, in local currency, the sales amount that was invoiced for this planning line.';
-                Visible = false;
+            // field("Qty. to Invoice"; rec."Qty. to Invoice")
+            // {
+            //     ApplicationArea = Jobs;
+            //     ToolTip = 'Specifies the quantity that remains to be invoiced. It is calculated as Quantity - Qty. Invoiced.';
+            //     Visible = false;
+            // }
+            // field("Invoiced Amount (LCY)"; rec."Invoiced Amount (LCY)")
+            // {
+            //     ApplicationArea = Jobs;
+            //     ToolTip = 'Specifies, in local currency, the sales amount that was invoiced for this planning line.';
+            //     Visible = false;
 
-                trigger OnDrillDown()
-                begin
-                    rec.DrillDownJobInvoices();
-                end;
-            }
-            field("Invoiced Cost Amount (LCY)"; rec."Invoiced Cost Amount (LCY)")
-            {
-                ApplicationArea = Jobs;
-                ToolTip = 'Specifies, in the local currency, the cost amount that was invoiced for this planning line.';
-                Visible = false;
+            //     trigger OnDrillDown()
+            //     begin
+            //         rec.DrillDownJobInvoices();
+            //     end;
+            // }
+            // field("Invoiced Cost Amount (LCY)"; rec."Invoiced Cost Amount (LCY)")
+            // {
+            //     ApplicationArea = Jobs;
+            //     ToolTip = 'Specifies, in the local currency, the cost amount that was invoiced for this planning line.';
+            //     Visible = false;
 
-                trigger OnDrillDown()
-                begin
-                    rec.DrillDownJobInvoices();
-                end;
-            }
-            field("User ID"; rec."User ID")
-            {
-                ApplicationArea = Jobs;
-                ToolTip = 'Specifies the ID of the user who posted the entry, to be used, for example, in the change log.';
-                Visible = false;
-            }
-            field("Serial No."; rec."Serial No.")
-            {
-                ApplicationArea = ItemTracking;
-                ToolTip = 'Specifies the serial number that is applied to the posted item if the planning line was created from the posting of a job journal line.';
-                Visible = false;
-            }
-            field("Lot No."; rec."Lot No.")
-            {
-                ApplicationArea = ItemTracking;
-                ToolTip = 'Specifies the lot number that is applied to the posted item if the planning line was created from the posting of a job journal line.';
-                Visible = false;
-            }
-            field("Job Contract Entry No."; rec."Job Contract Entry No.")
-            {
-                ApplicationArea = Jobs;
-                ToolTip = 'Specifies the entry number of the job planning line that the sales line is linked to.';
-                Visible = false;
-            }
-            field("Ledger Entry Type"; rec."Ledger Entry Type")
-            {
-                ApplicationArea = Jobs;
-                ToolTip = 'Specifies the entry type of the job ledger entry associated with the planning line.';
-                Visible = false;
-            }
-            field("Ledger Entry No."; rec."Ledger Entry No.")
-            {
-                ApplicationArea = Jobs;
-                ToolTip = 'Specifies the entry number of the job ledger entry associated with the job planning line.';
-                Visible = false;
-            }
-            field("System-Created Entry"; rec."System-Created Entry")
-            {
-                ApplicationArea = Jobs;
-                ToolTip = 'Specifies that an entry has been created by Business Central and is related to a job ledger entry. The check box is selected automatically.';
-                Visible = false;
-            }
-            field(Overdue; rec.Overdue())
-            {
-                ApplicationArea = Jobs;
-                Caption = 'Overdue';
-                Editable = false;
-                ToolTip = 'Specifies that the job is overdue. ';
-                Visible = false;
-            }
-            field(ActualInvDate; ActualInvDate)
-            {
-                ApplicationArea = All;
-                Caption = 'Actual Invoice Date';
-                Editable = false;
-                Visible = false;
-            }
-            field(ActualPymntDate; ActualPymntDate)
-            {
-                ApplicationArea = All;
-                Caption = 'Actual Payment Date';
-                Editable = false;
-                Visible = false;
-            }
+            //     trigger OnDrillDown()
+            //     begin
+            //         rec.DrillDownJobInvoices();
+            //     end;
+            // }
+            // field("User ID"; rec."User ID")
+            // {
+            //     ApplicationArea = Jobs;
+            //     ToolTip = 'Specifies the ID of the user who posted the entry, to be used, for example, in the change log.';
+            //     Visible = false;
+            // }
+            // field("Serial No."; rec."Serial No.")
+            // {
+            //     ApplicationArea = ItemTracking;
+            //     ToolTip = 'Specifies the serial number that is applied to the posted item if the planning line was created from the posting of a job journal line.';
+            //     Visible = false;
+            // }
+            // field("Lot No."; rec."Lot No.")
+            // {
+            //     ApplicationArea = ItemTracking;
+            //     ToolTip = 'Specifies the lot number that is applied to the posted item if the planning line was created from the posting of a job journal line.';
+            //     Visible = false;
+            // }
+            // field("Job Contract Entry No."; rec."Job Contract Entry No.")
+            // {
+            //     ApplicationArea = Jobs;
+            //     ToolTip = 'Specifies the entry number of the job planning line that the sales line is linked to.';
+            //     Visible = false;
+            // }
+            // field("Ledger Entry Type"; rec."Ledger Entry Type")
+            // {
+            //     ApplicationArea = Jobs;
+            //     ToolTip = 'Specifies the entry type of the job ledger entry associated with the planning line.';
+            //     Visible = false;
+            // }
+            // field("Ledger Entry No."; rec."Ledger Entry No.")
+            // {
+            //     ApplicationArea = Jobs;
+            //     ToolTip = 'Specifies the entry number of the job ledger entry associated with the job planning line.';
+            //     Visible = false;
+            // }
+            // field("System-Created Entry"; rec."System-Created Entry")
+            // {
+            //     ApplicationArea = Jobs;
+            //     ToolTip = 'Specifies that an entry has been created by Business Central and is related to a job ledger entry. The check box is selected automatically.';
+            //     Visible = false;
+            // }
+            // field(Overdue; rec.Overdue())
+            // {
+            //     ApplicationArea = Jobs;
+            //     Caption = 'Overdue';
+            //     Editable = false;
+            //     ToolTip = 'Specifies that the job is overdue. ';
+            //     Visible = false;
+            // }
+            // field(ActualInvDate; ActualInvDate)
+            // {
+            //     ApplicationArea = All;
+            //     Caption = 'Actual Invoice Date';
+            //     Editable = false;
+            //     Visible = false;
+            // }
+            // field(ActualPymntDate; ActualPymntDate)
+            // {
+            //     ApplicationArea = All;
+            //     Caption = 'Actual Payment Date';
+            //     Editable = false;
+            //     Visible = false;
+            // }
         }
         area(factboxes)
         {
@@ -676,6 +818,27 @@ page 50109 "Job Planning Lines New"
                             CurrPage.UPDATE(false);
                             MESSAGE(Text002, JobPlanningLine.TABLECAPTION, JobJnlLine.TABLECAPTION);
                         end;
+                    end;
+                }
+                action(CopyTask1100To1200)
+                {
+                    //VJ 28Oct2026 created this button as per Cara
+                    ApplicationArea = All;
+                    Caption = 'Copy Task 1100 to 1200';
+                    ToolTip = 'Creates or updates Task 1200 lines from all Task 1100 lines.';
+                    Image = Copy;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    PromotedOnly = true;
+
+                    trigger OnAction()
+                    var
+                        CopyTaskMgt: Codeunit "Copy Task 1100 To 1200";
+                    begin
+                        if not Confirm('Copy all Task 1100 lines to Task 1200? Existing 1200 lines will be updated.') then
+                            exit;
+
+                        CopyTaskMgt.Run(Rec);
                     end;
                 }
                 action(UpdatePICBalance)

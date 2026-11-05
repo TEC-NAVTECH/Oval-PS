@@ -150,7 +150,14 @@ pageextension 50101 JobCardExtension extends "Job Card"
                 RunObject = page "PIC List";
                 RunPageLink = "Project Code" = field("No.");
             }
-
+            action(ProjectBalanceList)
+            {
+                Caption = 'PIC Project Balance List';
+                ApplicationArea = All;
+                Image = PersonInCharge;
+                RunObject = page "PIC Project Balance List";
+                RunPageLink = "Project Code" = field("No.");
+            }
             action(GeneratePICBalance) //VJ 01JUNE2026 Action button added
             {
                 Caption = 'Generate PIC Balance';
@@ -159,8 +166,11 @@ pageextension 50101 JobCardExtension extends "Job Card"
                 trigger OnAction()
                 var
                     PICManagment: Codeunit "PIC Project Managment";
+                    recUserSetup: Record "User Setup";
                 begin
-
+                    recUserSetup.Get(UserId);
+                    if not recUserSetup."Setup Admin" then
+                        Error('you do not have permission to run');
                     if Confirm('Do You Want Generate PIC Balance for Job %1?', false, Rec."No.") then begin
                         PICManagment.GeneratePICBalance(Rec);
                         Message('PIC Balance Generated');

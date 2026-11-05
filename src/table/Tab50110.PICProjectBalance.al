@@ -108,5 +108,10 @@ table 50110 "PIC Project Balance"
         {
             Clustered = true;
         }
+        KEY(Project; "Project Code", "Job Task No.", "Line No.", project_PIC)
+        {
+            Clustered = false;
+        }
+
     }
 }

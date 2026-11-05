@@ -52,8 +52,10 @@ table 50114 "PIC"
         }
         field(7; "Project Name"; Text[250])
         {
-            DataClassification = ToBeClassified;
+            //DataClassification = ToBeClassified;
             Caption = 'Project Name';
+            FieldClass = FlowField;
+            CalcFormula = lookup(Job.Description where("No." = field("Project Code")));
         }
         field(8; "PIC"; Code[20])
         {
@@ -65,7 +67,7 @@ table 50114 "PIC"
     }
     keys
     {
-        key(PK; "Project Code", "Resource No.")
+        key(PK; "Project Code", "Resource No.", "Effective Date")
         {
             Clustered = true;
         }

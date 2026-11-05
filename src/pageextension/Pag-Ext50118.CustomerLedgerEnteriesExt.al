@@ -5,11 +5,11 @@ pageextension 50118 CustomerLedgerEnteriesExt extends "Customer Ledger Entries"
         addafter("Sales (LCY)")
         {
 
-            // field("Transaction No."; Rec."Transaction No.")
-            // {
-            //     ApplicationArea = All;
-            //     ToolTip = 'Specifies the value of the Transaction No. field.', Comment = '%';
-            // }
+            field("Transaction No."; Rec."Transaction No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Transaction No. field.', Comment = '%';
+            }
 
         }
         addafter("Due Date")

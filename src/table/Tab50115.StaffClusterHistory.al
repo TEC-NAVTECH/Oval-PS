@@ -13,6 +13,7 @@ table 50115 "Staff Cluster History"
             DataClassification = CustomerContent;
         }
 
+
         // ── Staff (lookup Resource table) ────────────────────────
         field(2; Staff; Code[20])
         {
@@ -27,13 +28,14 @@ table 50115 "Staff Cluster History"
                 if Staff = '' then begin
                     "Staff_Name" := '';
                     "Resource_Group_No" := '';
-                    Status := Status::" ";
+                    //Status := Status::" ";
                     exit;
                 end;
 
                 if Resource.Get(Staff) then begin
                     "Staff_Name" := Resource.Name;
                     "Resource_Group_No" := Resource."Resource Group No.";
+                    Status := Resource.Status;//VJ27102026 Added
                 end;
             end;
         }
@@ -46,7 +48,8 @@ table 50115 "Staff Cluster History"
         {
             Caption = 'Staff Cluster';
             DataClassification = CustomerContent;
-            TableRelation = Resource."No.";
+            // TableRelation = Resource."No.";// VJ15102026 Commented As Cara "Staff Cluster" column to lookup Staff cluster list
+            TableRelation = "Staff Cluster".Code;// VJ15102026 Added As Cara "Staff Cluster" column to lookup Staff cluster list
         }
 
         field(5; Effective_Date; Date)
@@ -77,8 +80,8 @@ table 50115 "Staff Cluster History"
         {
             Caption = 'Status';
             DataClassification = CustomerContent;
-            OptionCaption = ' ,Active,Inactive,Planning,Resigned,Rotated';
-            OptionMembers = " ",Active,Inactive,Planning,Resigned,Rotated;
+            OptionCaption = 'Active,Inactive,Planning,Resigned,Rotated';
+            OptionMembers = "Active","Inactive","Planning","Resigned","Rotated";
         }
         field(9; Cluster_Description; Text[500])
         {

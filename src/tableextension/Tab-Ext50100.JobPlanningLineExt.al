@@ -57,6 +57,7 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
             begin
                 "Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";
                 "Net Amount LCY" := "Net amount FCY" * "Exchange Rate";
+                Rec.ApplyTaskLogic(Rec);//VJ 28Oct2026 aded new function so when user do edit in excel to create new line for below task, insert these fields
             end;
         }
         field(50004; "SCC issue date"; Date)
@@ -66,6 +67,10 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
         {
             DataClassification = ToBeClassified;
             //Editable = false;
+            trigger OnValidate()
+            begin
+                Rec.ApplyTaskLogic(Rec);//VJ 28Oct2026 aded new function so when user do edit in excel to create new line for below task, insert these fields
+            end;
         }
         field(50006; "Bank Charge FCY"; Decimal)
         {
@@ -153,6 +158,7 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
                         //rec.Modify();
                     end;
                 end;
+                Rec.ApplyTaskLogic(Rec);//VJ 28Oct2026 aded new function so when user do edit in excel to create new line for below task, insert these fields
             end;
         }
         field(50107; "Contract Line No."; Integer)
@@ -167,7 +173,8 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
             Caption = 'Invoice No.';
             FieldClass = FlowField;
             CalcFormula = lookup("Job Planning Line Invoice"."Document No." where("Document Type" = filter("Posted Invoice"), "Job No." = field("Job No."), "Job Task No." = field("Job Task No."), "Job Planning Line No." = field("Line No.")));
-            Editable = false;
+            //Editable = false;
+
         }
         field(50109; "Total Hours Percent"; Decimal)
         {
@@ -199,6 +206,7 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
         {
             DataClassification = ToBeClassified;
         }
+
     }
     keys
     {
@@ -209,4 +217,55 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
     var
         ContractHdr: Record "Contract Card Header";
         ContractLine: Record "Contract Card Line";
+
+
+
+    procedure ApplyTaskLogic(var JobPlanningLine: Record "Job Planning Line")
+    begin
+        //VJ 28Oct2026 aded new function so when user do edit in excel to create new line for below task, insert these fields
+        if not IsTaskNoEnabled(JobPlanningLine."Job Task No.") then
+            exit;
+
+        case JobPlanningLine."Job Task No." of
+            '1100':
+                ApplyTask1100(JobPlanningLine);
+            '3000':
+                ApplyTask1100(JobPlanningLine); // TODO: logic for 3000
+            '4000':
+                ApplyTask1100(JobPlanningLine); // TODO: logic for 4000
+            '5000':
+                ApplyTask1100(JobPlanningLine); // TODO: logic for 5000
+        end;
+    end;
+
+    local procedure IsTaskNoEnabled(JobTaskNo: Code[20]): Boolean
+    begin
+        exit(JobTaskNo in ['1100', '3000', '4000', '5000']);
+    end;
+
+    local procedure ApplyTask1100(var JobPlanningLine: Record "Job Planning Line")
+    var
+        JobsSetup: Record "Jobs Setup";
+    begin
+        JobsSetup.Get();
+
+        // Defaults
+        if JobPlanningLine."Job Task No." = '1100' then
+            JobPlanningLine."Line Type" := JobPlanningLine."Line Type"::Billable;
+        JobPlanningLine.Validate(Type, JobPlanningLine.Type::"G/L Account");
+        if JobPlanningLine."No." = '' then
+            JobPlanningLine.Validate("No.", JobsSetup."Job Planning Line Account No.");
+        if JobPlanningLine.Quantity = 0 then
+            JobPlanningLine.Validate(Quantity, 1);
+
+        // Currency
+        if JobPlanningLine."Currency Code" <> JobPlanningLine."Currency Code 2" then
+            JobPlanningLine.Validate("Currency Code", JobPlanningLine."Currency Code 2");
+
+        // Amounts
+        JobPlanningLine.Validate("Unit Price", JobPlanningLine."Net Amount FCY");
+        JobPlanningLine."Currency Factor" := JobPlanningLine."Net amount FCY" / JobPlanningLine."Net Amount LCY";
+        //JobPlanningLine."Unit Price (LCY)" := JobPlanningLine."Net Amount LCY";
+    end;
+
 }

@@ -8,9 +8,10 @@
             "tenant": "49d00e8f-294d-490f-94d9-07b340a08d43",                       
             "environmentType": "Sandbox",
             // "environmentName": "SandboxTest",
-            "environmentName": "ProdCopy_20261001",
-            //"environmentName": "Sandbox_2026",
-
+            //"environmentName": "ProdCopy_20261001",
+            "environmentName": "ProdCopy_20260601",
+"startupObjectType": "Page",
+"startupObjectId": 89,
             "breakOnError": true,
             "launchBrowser": true,
             "enableLongRunningSqlStatements": true,

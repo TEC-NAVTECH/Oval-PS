@@ -41,7 +41,8 @@ codeunit 50100 "Subscribe Events"
             JobTask.Init();
             JobTask.Validate("Job No.", Rec."No.");
             JobTask.Validate("Job Task No.", '3000');
-            JobTask.Validate(Description, 'Expenses');
+            //JobTask.Validate(Description, 'Expenses');
+            JobTask.Validate(Description, 'Other Project Expenses');//VJ Changed 03Nov2026
             JobTask.Insert(true);
         end;
         PICmgtCU.GenerateProjectTask(rec);//TEC VJ 23July2026

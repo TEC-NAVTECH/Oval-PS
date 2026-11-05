@@ -10,15 +10,16 @@ table 50113 "Projected HR %"
             DataClassification = ToBeClassified;
             Caption = 'Resource No';
             TableRelation = Resource;
-            trigger OnValidate()
-            var
-                Resource: record Resource;
-            begin
-                Resource.Reset();
-                Resource.SetRange("No.", "Resource No");
-                if Resource.FindFirst() then;
-                Rec."Resource Name" := Resource."Name (Short)";
-            end;
+            // trigger OnValidate()
+            // var
+            //     Resource: record Resource;
+            // begin
+            //     Resource.Reset();
+            //     Resource.SetRange("No.", "Resource No");
+            //     if Resource.FindFirst() then;
+            //     Rec."Resource Name" := Resource."Name (Short)";
+            // end;
+            //VJ Field converted to flow field 15Oct2026
         }
         field(2; "Project Code"; Text[100])
         {
@@ -40,11 +41,13 @@ table 50113 "Projected HR %"
             DataClassification = ToBeClassified;
             Caption = 'MonthYear';
         }
-        field(4; "Resource Name"; Text[50])
+        field(4; "Resource Name"; Text[100])
         {
-            DataClassification = ToBeClassified;
+            //DataClassification = ToBeClassified;
             Caption = 'Resource Name';
             Editable = false;
+            FieldClass = FlowField;
+            CalcFormula = lookup(Resource.Name where("No." = field("Resource No")));
         }
         field(5; "Project Name"; Text[100])
         {
