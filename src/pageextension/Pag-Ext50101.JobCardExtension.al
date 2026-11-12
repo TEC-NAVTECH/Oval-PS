@@ -100,6 +100,7 @@ pageextension 50101 JobCardExtension extends "Job Card"
             field(PIC; Rec.PIC)
             {
                 ApplicationArea = All;
+                Visible = false; // VJ 12Nov2026
             }
         }
         addafter(Blocked)
