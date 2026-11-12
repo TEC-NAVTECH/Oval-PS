@@ -80,12 +80,17 @@ codeunit 50100 "Subscribe Events"
                 ResourceCost.SetRange(Type, ResourceCost.Type::Resource);
                 ResourceCost.SetRange(Code, Rec."No.");
                 ResourceCost.SetRange("Effective Date", CalcDate('<-CM>', Rec."Posting Date"), CalcDate('<CM>', Rec."Posting Date"));
-                if TimeSheetLine."Timesheet Nature" = TimeSheetLine."Timesheet Nature"::Actual then ResourceCost.SetRange("History Status", ResourceCost."History Status"::Actual);
-                if TimeSheetLine."Timesheet Nature" = TimeSheetLine."Timesheet Nature"::Projected then ResourceCost.SetRange("History Status", ResourceCost."History Status"::Projected);
-                if ResourceCost.FindLast() then Salary := ResourceCost."Monthly Salary";
+                if TimeSheetLine."Timesheet Nature" = TimeSheetLine."Timesheet Nature"::Actual then
+                    ResourceCost.SetRange("History Status", ResourceCost."History Status"::Actual);
+                if TimeSheetLine."Timesheet Nature" = TimeSheetLine."Timesheet Nature"::Projected then
+                    ResourceCost.SetRange("History Status", ResourceCost."History Status"::Projected);
+                if ResourceCost.FindLast() then
+                    Salary := ResourceCost."Monthly Salary";
                 UnitCost := 0;
-                if TimeSheetHdr."Time Sheet Type" = TimeSheetHdr."Time Sheet Type"::Hour then UnitCost := Salary / TotalQty;
-                if TimeSheetHdr."Time Sheet Type" = TimeSheetHdr."Time Sheet Type"::Percent then UnitCost := Salary / TotalQty;
+                if TimeSheetHdr."Time Sheet Type" = TimeSheetHdr."Time Sheet Type"::Hour then
+                    UnitCost := Salary / TotalQty;
+                if TimeSheetHdr."Time Sheet Type" = TimeSheetHdr."Time Sheet Type"::Percent then
+                    UnitCost := Salary / TotalQty;
                 Rec.Validate("Unit Cost (LCY)", UnitCost);
                 //Resource.Get(Rec."No.");
                 //if Resource."Overseas Staff" then
@@ -189,7 +194,8 @@ codeunit 50100 "Subscribe Events"
         JobPlanLine.SetRange("Planning Date", Rec."Planning Date");
         JobPlanLine.SetRange("Invoice No.", '');
         JobPlanLine.SetRange("Line Type", JobPlanLine."Line Type"::Budget);
-        if JobPlanLine.FindFirst() then JobPlanLine.Delete();
+        if JobPlanLine.FindFirst() then
+            JobPlanLine.Delete();
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Job Planning Line", 'OnAfterValidateEvent', 'Unit Price', true, true)]
@@ -208,7 +214,7 @@ codeunit 50100 "Subscribe Events"
                 Rec."Unit Price (LCY)" := Rec."Unit Price" * ExchRate."Relational Exch. Rate Amount";
                 Rec."Line Amount (LCY)" := Rec."Line Amount" * ExchRate."Relational Exch. Rate Amount";
                 Rec."Total Price (LCY)" := Rec."Total Price" * ExchRate."Relational Exch. Rate Amount";
-                Rec."Net Amount LCY" := Rec."Net amount FCY" * ExchRate."Relational Exch. Rate Amount";
+                //  Rec."Net Amount LCY" := Rec."Net amount FCY" * ExchRate."Relational Exch. Rate Amount";//VJ12112026 commentd as per cara
                 //rec.Modify();
             end;
         end
@@ -216,7 +222,7 @@ codeunit 50100 "Subscribe Events"
             Rec."Unit Price (LCY)" := Rec."Unit Price";
             Rec."Line Amount (LCY)" := Rec."Line Amount";
             Rec."Total Price (LCY)" := Rec."Total Price";
-            Rec."Net Amount LCY" := Rec."Net amount FCY";
+            // Rec."Net Amount LCY" := Rec."Net amount FCY";//VJ12112026 commentd as per cara
         end;
     end;
     //[EventSubscriber(ObjectType::Page, Page::"Job Journal", 'OnAfterActionEvent', 'P&ost', true, true)]
@@ -278,7 +284,8 @@ codeunit 50100 "Subscribe Events"
                 DimensionValue.Name := Rec."Person Responsible";
                 DimensionValue.INSERT(true);
             end;
-            if DefDim.Get(167, Rec."No.", 'PIC') then DefDim.Delete();
+            if DefDim.Get(167, Rec."No.", 'PIC') then
+                DefDim.Delete();
             DefDim.Init();
             DefDim."Table ID" := 167;
             DefDim."No." := Rec."No.";
@@ -293,7 +300,8 @@ codeunit 50100 "Subscribe Events"
     var
         JobPlanLine: Record "Job Planning Line";
     begin
-        if Rec."Document Type" = Rec."Document Type"::"Posted Invoice" then if JobPlanLine.Get(Rec."Job No.", Rec."Job Task No.", Rec."Job Planning Line No.") then;
+        if Rec."Document Type" = Rec."Document Type"::"Posted Invoice" then
+            if JobPlanLine.Get(Rec."Job No.", Rec."Job Task No.", Rec."Job Planning Line No.") then;
         //JobPlanLine."Actual Invoice Date" := Today;
         //JobPlanLine."Invoice No." := Rec."Document No.";
         //JobPlanLine.Modify();
@@ -337,7 +345,6 @@ codeunit 50100 "Subscribe Events"
     begin
         if Rec."Global Dimension 1 Code" <> '' then
             Rec.AuxiliaryIndex1 := Rec."Global Dimension 1 Code";
-
     end;
 
 

@@ -33,10 +33,10 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
             trigger OnValidate()
             begin
                 "Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";
-                if "Exchange Rate" <> 0 then
-                    "Net Amount LCY" := "Net amount FCY" * "Exchange Rate"
-                else
-                    "Net Amount LCY" := "Net amount FCY";
+                // if "Exchange Rate" <> 0 then //VJ12112026 commentd as per cara
+                //     "Net Amount LCY" := "Net amount FCY" * "Exchange Rate"
+                // else
+                //     "Net Amount LCY" := "Net amount FCY";
             end;
         }
         field(50002; "Subcon expense FCY"; Decimal)
@@ -45,10 +45,10 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
             begin
                 "Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";
                 //"Net Amount LCY" := "Net amount FCY" * "Exchange Rate";
-                if "Exchange Rate" <> 0 then
-                    "Net Amount LCY" := "Net amount FCY" * "Exchange Rate"
-                else
-                    "Net Amount LCY" := "Net amount FCY";
+                // if "Exchange Rate" <> 0 then//VJ12112026 commentd as per cara
+                //     "Net Amount LCY" := "Net amount FCY" * "Exchange Rate"
+                // else
+                //     "Net Amount LCY" := "Net amount FCY";
             end;
         }
         field(50003; "Net amount FCY"; Decimal)
@@ -56,7 +56,7 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
             trigger OnValidate()
             begin
                 "Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";
-                "Net Amount LCY" := "Net amount FCY" * "Exchange Rate";
+                //  "Net Amount LCY" := "Net amount FCY" * "Exchange Rate";//VJ12112026 commentd as per cara
                 Rec.ApplyTaskLogic(Rec);//VJ 28Oct2026 aded new function so when user do edit in excel to create new line for below task, insert these fields
             end;
         }
@@ -81,10 +81,10 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
             begin
                 "Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";
                 //"Net Amount LCY" := "Net amount FCY" * "Exchange Rate";
-                if "Exchange Rate" <> 0 then
-                    "Net Amount LCY" := "Net amount FCY" * "Exchange Rate"
-                else
-                    "Net Amount LCY" := "Net amount FCY";
+                // if "Exchange Rate" <> 0 then//VJ12112026 commentd as per cara
+                //     "Net Amount LCY" := "Net amount FCY" * "Exchange Rate"
+                // else
+                //     "Net Amount LCY" := "Net amount FCY";
             end;
         }
         field(50100; "Exchange Rate"; Decimal)
@@ -225,7 +225,6 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
         //VJ 28Oct2026 aded new function so when user do edit in excel to create new line for below task, insert these fields
         if not IsTaskNoEnabled(JobPlanningLine."Job Task No.") then
             exit;
-
         case JobPlanningLine."Job Task No." of
             '1100':
                 ApplyTask1100(JobPlanningLine);
