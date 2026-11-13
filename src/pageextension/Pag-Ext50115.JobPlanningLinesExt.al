@@ -2,6 +2,10 @@ pageextension 50115 JobPlanningLinesExt extends "Job Planning Lines"
 {
     layout
     {
+        modify("Line Type")
+        {
+            visible = true;
+        }
 
 
         addafter("Line Type")
@@ -39,6 +43,60 @@ pageextension 50115 JobPlanningLinesExt extends "Job Planning Lines"
             }
         }
         movebefore("Projected Bill Date"; "Planned Delivery Date")
+        addafter("Job No.")
+        {
+
+            field("Stage Payment Code"; Rec."Stage Payment Code")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Stage Payment Code field.', Comment = '%';
+            }
+            field("Contract Code"; Rec."Contract Code")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Contract Code field.', Comment = '%';
+            }
+            field("Currency Code 2"; Rec."Currency Code 2")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Currency Code 2 field.', Comment = '%';
+            }
+            field("Tax expense FCY"; Rec."Tax expense FCY")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Tax expense FCY field.', Comment = '%';
+            }
+            field("Subcon expense FCY"; Rec."Subcon expense FCY")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Subcon expense FCY field.', Comment = '%';
+            }
+            field("Bank Charge FCY"; Rec."Bank Charge FCY")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Bank Charge FCY field.', Comment = '%';
+            }
+            field("Net amount FCY"; Rec."Net amount FCY")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Net amount FCY field.', Comment = '%';
+            }
+            field("Net Amount LCY"; Rec."Net Amount LCY")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Net Amount LCY field.', Comment = '%';
+            }
+            field("Actual Invoice Date"; Rec."Actual Invoice Date")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Actual Invoice Date field.', Comment = '%';
+            }
+            field("Invoice No."; Rec."Invoice No.")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Invoice No. field.', Comment = '%';
+            }
+        }
     }
 
     actions

@@ -2,7 +2,7 @@
   "id": "bda809c9-d7f1-4195-a906-846db87e6efc",
   "name": "Oval-PS",
   "publisher": "Default publisher",
-  "version": "1.0.0.23",
+  "version": "1.0.0.24",
   "runtime": "16.0",
   "target": "Cloud",
   "application": "28.0.0.0",

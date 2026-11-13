@@ -32,7 +32,7 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
         {
             trigger OnValidate()
             begin
-                "Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";
+                //"Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";//VJ 13Nov2026 commented as per cara
                 // if "Exchange Rate" <> 0 then //VJ12112026 commentd as per cara
                 //     "Net Amount LCY" := "Net amount FCY" * "Exchange Rate"
                 // else
@@ -43,7 +43,7 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
         {
             trigger OnValidate()
             begin
-                "Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";
+                //"Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";//VJ 13Nov2026 commented as per cara
                 //"Net Amount LCY" := "Net amount FCY" * "Exchange Rate";
                 // if "Exchange Rate" <> 0 then//VJ12112026 commentd as per cara
                 //     "Net Amount LCY" := "Net amount FCY" * "Exchange Rate"
@@ -55,7 +55,7 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
         {
             trigger OnValidate()
             begin
-                "Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";
+                //"Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";//VJ 13Nov2026 commented as per cara
                 //  "Net Amount LCY" := "Net amount FCY" * "Exchange Rate";//VJ12112026 commentd as per cara
                 Rec.ApplyTaskLogic(Rec);//VJ 28Oct2026 aded new function so when user do edit in excel to create new line for below task, insert these fields
             end;
@@ -70,6 +70,7 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
             trigger OnValidate()
             begin
                 Rec.ApplyTaskLogic(Rec);//VJ 28Oct2026 aded new function so when user do edit in excel to create new line for below task, insert these fields
+
             end;
         }
         field(50006; "Bank Charge FCY"; Decimal)
@@ -79,7 +80,7 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
             //Editable = false;
             trigger OnValidate()
             begin
-                "Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";
+                //"Net amount FCY" := "Total Price" + "Tax expense FCY" + "Subcon expense FCY" + "Bank Charge FCY";//VJ 13Nov2026 commented as per cara
                 //"Net Amount LCY" := "Net amount FCY" * "Exchange Rate";
                 // if "Exchange Rate" <> 0 then//VJ12112026 commentd as per cara
                 //     "Net Amount LCY" := "Net amount FCY" * "Exchange Rate"
@@ -143,21 +144,23 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
             var
                 ExchRate: Record "Currency Exchange Rate";
             begin
-                if Rec."Currency Code 2" <> '' then begin
-                    ExchRate.Reset();
-                    ExchRate.SetCurrentKey("Currency Code", "Starting Date");
-                    ExchRate.SetRange("Currency Code", Rec."Currency Code 2");
-                    ExchRate.SetRange("Starting Date", 0D, WorkDate());
-                    if ExchRate.FindLast() then begin
-                        Rec."Exchange Rate" := ExchRate."Relational Exch. Rate Amount";
-                        Rec."Unit Price (LCY)" := Rec."Unit Price" * ExchRate."Relational Exch. Rate Amount";
-                        Rec."Line Amount (LCY)" := Rec."Line Amount" * ExchRate."Relational Exch. Rate Amount";
-                        Rec."Total Price (LCY)" := Rec."Total Price" * ExchRate."Relational Exch. Rate Amount";
-                        Rec."Unit Cost (LCY)" := rec."Unit Cost" * ExchRate."Relational Exch. Rate Amount";
-                        rec."Total Cost (LCY)" := rec."Total Cost" * ExchRate."Relational Exch. Rate Amount";
-                        //rec.Modify();
-                    end;
-                end;
+                // VJ 13Nov2026 commented as per cara start to allow user to enter manually through edit in excel
+                // if Rec."Currency Code 2" <> '' then begin
+                //     ExchRate.Reset();
+                //     ExchRate.SetCurrentKey("Currency Code", "Starting Date");
+                //     ExchRate.SetRange("Currency Code", Rec."Currency Code 2");
+                //     ExchRate.SetRange("Starting Date", 0D, WorkDate());
+                //     if ExchRate.FindLast() then begin
+                //         Rec."Exchange Rate" := ExchRate."Relational Exch. Rate Amount";
+                //         Rec."Unit Price (LCY)" := Rec."Unit Price" * ExchRate."Relational Exch. Rate Amount";
+                //         Rec."Line Amount (LCY)" := Rec."Line Amount" * ExchRate."Relational Exch. Rate Amount";
+                //         Rec."Total Price (LCY)" := Rec."Total Price" * ExchRate."Relational Exch. Rate Amount";
+                //         Rec."Unit Cost (LCY)" := rec."Unit Cost" * ExchRate."Relational Exch. Rate Amount";
+                //         rec."Total Cost (LCY)" := rec."Total Cost" * ExchRate."Relational Exch. Rate Amount";
+                //         //rec.Modify();
+                //     end;
+                // end;
+                //
                 Rec.ApplyTaskLogic(Rec);//VJ 28Oct2026 aded new function so when user do edit in excel to create new line for below task, insert these fields
             end;
         }
@@ -261,10 +264,20 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
         if JobPlanningLine."Currency Code" <> JobPlanningLine."Currency Code 2" then
             JobPlanningLine.Validate("Currency Code", JobPlanningLine."Currency Code 2");
 
+        if JobPlanningLine."Job Task No." = '1100' then BEGIN
+            JobPlanningLine."Line Amount (LCY)" := JobPlanningLine."Net Amount LCY";//VJ 13Nov2026 added as per cara
+        END else
+            JobPlanningLine."Total Cost (LCY)" := JobPlanningLine."Net Amount LCY";//VJ 13Nov2026 added as per cara
+
         // Amounts
-        JobPlanningLine.Validate("Unit Price", JobPlanningLine."Net Amount FCY");
-        JobPlanningLine."Currency Factor" := JobPlanningLine."Net amount FCY" / JobPlanningLine."Net Amount LCY";
+        // JobPlanningLine.Validate("Unit Price", JobPlanningLine."Net Amount FCY");
+        // JobPlanningLine."Currency Factor" := JobPlanningLine."Net amount FCY" / JobPlanningLine."Net Amount LCY";
+
         //JobPlanningLine."Unit Price (LCY)" := JobPlanningLine."Net Amount LCY";
+        //VJ 13Nov 2026 added as per cara start
+        // JobPlanningLine."Net amount FCY" := "Unit Price";
+        // JobPlanningLine."Net Amount LCY" := "Unit Price (LCY)";
+        //VJ 13Nov 2026 added as per cara end
     end;
 
 }

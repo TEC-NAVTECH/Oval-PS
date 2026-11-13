@@ -203,7 +203,7 @@ codeunit 50100 "Subscribe Events"
     var
         ExchRate: Record "Currency Exchange Rate";
     begin
-        Rec."Net amount FCY" := Rec."Unit Price" * Rec.Quantity;
+        //Rec."Net amount FCY" := Rec."Unit Price" * Rec.Quantity; //VJ 13Nov2026 commented as per cara
         if Rec."Currency Code 2" <> '' then begin
             ExchRate.Reset();
             ExchRate.SetCurrentKey("Currency Code", "Starting Date");
