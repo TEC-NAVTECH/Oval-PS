@@ -63,5 +63,7 @@ codeunit 50109 "Copy Task 1100 To 1200"
         Target."Ledger Entry No." := Keep."Ledger Entry No.";
         Target."Ledger Entry Type" := Keep."Ledger Entry Type";
         Target."Job Contract Entry No." := Keep."Job Contract Entry No.";
+        target."Line Amount (LCY)" := keep."Line Amount (LCY)";//VJ 13Nov2026 added to keep line amount
+        target."Total Cost (LCY)" := keep."Total Cost (LCY)";//VJ 13Nov2026 added to keep line amount
     end;
 }
