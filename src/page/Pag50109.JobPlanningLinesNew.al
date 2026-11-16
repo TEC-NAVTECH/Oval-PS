@@ -60,6 +60,10 @@ page 50109 "Project Planning lines"
                     ToolTip = 'Specifies the value of the Currency Code field.', Comment = '%';
                     Editable = true;
                 }
+                field("Currency Text"; Rec."Currency Text")
+                {
+                    ToolTip = 'Specifies the value of the Currency Text field.', Comment = '%';
+                }
                 field("Currency Code 2"; rec."Currency Code 2")
                 {
                     ApplicationArea = Jobs;

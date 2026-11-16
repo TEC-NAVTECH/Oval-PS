@@ -96,6 +96,11 @@ pageextension 50115 JobPlanningLinesExt extends "Job Planning Lines"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the Invoice No. field.', Comment = '%';
             }
+            field("Currency Text"; Rec."Currency Text")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the Currency Text field.', Comment = '%';
+            }
         }
     }
 

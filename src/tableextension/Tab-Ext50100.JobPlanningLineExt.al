@@ -209,6 +209,10 @@ tableextension 50100 JobPlanningLineExt extends "Job Planning Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(50117; "Currency Text"; text[10])
+        {
+            DataClassification = ToBeClassified;
+        }
 
     }
     keys
