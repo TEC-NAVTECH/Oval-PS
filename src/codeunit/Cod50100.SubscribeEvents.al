@@ -347,6 +347,15 @@ codeunit 50100 "Subscribe Events"
             Rec.AuxiliaryIndex1 := Rec."Global Dimension 1 Code";
     end;
 
+    //VG 17-11-2026 Added to avoid the error of blocked job
+    [EventSubscriber(ObjectType::Table, Database::Job, OnBeforeTestBlocked, '', false, false)]
+    local procedure Job_OnBeforeTestBlocked(var Job: Record Job; var IsHandled: Boolean)
+    begin
+        IsHandled := true;
+    end;
+    //VG 17-11-2026 Added to avoid the error of blocked job
+
+
 
 
 
